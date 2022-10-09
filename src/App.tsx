@@ -1,15 +1,18 @@
 import { Routes, Route } from 'react-router-dom';
+import { NotFound, MainNavigation } from './components';
+import { LandPage } from './pages';
 
-import { Welcome } from './components/Welcome/Welcome';
-import { NotFound } from './components/NotFound/NotFound';
+import './index.css';
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <div>
-      <Routes>
-        <Route path='/' element={<Welcome />} />
-        <Route path='*' element={<NotFound />} />
-      </Routes>
+      <MainNavigation>
+        <Routes>
+          <Route path='/' element={<LandPage />} />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+      </MainNavigation>
     </div>
   );
 };
