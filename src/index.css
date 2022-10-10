@@ -14,3 +14,26 @@
 .slick-list {
   margin: auto 10px;
 }
+
+.css-1kcnzpi-MuiSkeleton-root::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 90, 112, 0.185),
+    transparent
+  ) !important;
+}
+
+@media (min-width: 600px) {
+  .slick-prev:before,
+  .slick-next:before {
+    font-size: 30px !important;
+    line-height: 30px !important;
+  }
+  .slick-next {
+    width: auto;
+  }
+  .slick-dots li button::before {
+    font-size: 12px !important;
+  }
+}

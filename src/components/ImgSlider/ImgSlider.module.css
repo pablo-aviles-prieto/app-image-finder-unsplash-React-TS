@@ -4,6 +4,13 @@
   width: 80%;
 }
 
+.placeholder-card {
+  border: 2px solid rgba(2, 101, 182, 0.364);
+  border-radius: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.31) !important;
+  width: calc(100% - 0.4rem) !important;
+}
+
 @media (min-width: 600px) {
   .slider {
     width: 90%;
