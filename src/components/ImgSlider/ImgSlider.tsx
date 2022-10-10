@@ -3,7 +3,7 @@ import { ImgCard } from './ImgCard';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import styles from './ImgSlider.module.css'
+import styles from './ImgSlider.module.css';
 
 const imgPlaceholder: { img: string; title: string }[] = [
   {
@@ -33,7 +33,7 @@ const settings = {
   infinite: true,
   speed: 500,
   arrows: true,
-//   autoplay: true,
+  autoplay: true,
   swipeToSlide: true,
   slidesToShow: 3,
   slidesToScroll: 1,
@@ -51,11 +51,9 @@ const settings = {
 
 export const ImgSlider: React.FC = () => {
   return (
-    <Slider className= {styles.slider} {...settings}>
+    <Slider className={styles.slider} {...settings}>
       {imgPlaceholder.map((item) => (
-        <div key={item.img}>
-          <ImgCard img={item?.img} title={item?.title} />
-        </div>
+        <ImgCard key={item.img} img={item.img} title={item.title} />
       ))}
     </Slider>
   );

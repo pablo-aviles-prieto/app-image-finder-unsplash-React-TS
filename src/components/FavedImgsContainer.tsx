@@ -13,7 +13,7 @@ export const FavedImgsContainer: React.FC = () => {
     <>
       <div className={styles['img-container']}>
         <img
-          src={`${process.env.PUBLIC_URL}bground.jpg`}
+          src={`${process.env.PUBLIC_URL}bground3.jpg`}
           alt='An incredible mountain view'
         />
         <form onSubmit={submitFormHandler} className={styles.form}>
@@ -28,7 +28,7 @@ export const FavedImgsContainer: React.FC = () => {
           </button>
         </form>
         <div className={styles['faved-imgs-container']}>
-          <p>Faved images</p>
+          <p>Your fav'ed images</p>
           <ImgSlider />
         </div>
       </div>

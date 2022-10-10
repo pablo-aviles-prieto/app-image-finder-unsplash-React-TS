@@ -1,0 +1,17 @@
+.fav-box,
+.search-box {
+  cursor: pointer;
+}
+
+.fav-box > button,
+.search-box > button {
+  transition: all 0.4s ease-out;
+}
+
+.fav-box:hover > button {
+  color: red;
+}
+
+.search-box:hover > button {
+  transform: rotate(-90deg);
+}

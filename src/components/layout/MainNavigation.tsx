@@ -2,6 +2,8 @@ import React from 'react';
 import { Box, AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 import { Search, Favorite } from '@mui/icons-material';
 
+import styles from './MainNavigation.module.css';
+
 export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
   return (
     <>
@@ -18,7 +20,10 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
             <Typography
               fontSize={{ xs: '2rem', sm: '2.5rem', md: '3rem' }}
               component='h2'
-              sx={{ flexGrow: 1 }}
+              sx={{
+                flexGrow: 1,
+                textShadow: '0px 0px 17px rgba(9, 128, 226, 0.9)',
+              }}
             >
               StorIMG
             </Typography>
@@ -29,7 +34,10 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
                 gap: { xs: '1rem', sm: '3rem' },
               }}
             >
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box
+                className={styles['fav-box']}
+                sx={{ display: 'flex', alignItems: 'center' }}
+              >
                 <IconButton
                   size='large'
                   edge='start'
@@ -46,12 +54,19 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
                 <Typography
                   fontSize={{ sm: '1.3rem', md: '1.6rem', lg: '2rem' }}
                   component='h3'
-                  sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                  sx={{
+                    flexGrow: 1,
+                    display: { xs: 'none', sm: 'block' },
+                    textShadow: '0px 0px 17px rgba(9, 128, 226, 0.9)',
+                  }}
                 >
                   Favorites
                 </Typography>
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box
+                className={styles['search-box']}
+                sx={{ display: 'flex', alignItems: 'center' }}
+              >
                 <IconButton
                   size='large'
                   edge='start'
@@ -68,7 +83,11 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
                 <Typography
                   fontSize={{ sm: '1.3rem', md: '1.6rem', lg: '2rem' }}
                   component='h3'
-                  sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                  sx={{
+                    flexGrow: 1,
+                    display: { xs: 'none', sm: 'block' },
+                    textShadow: '0px 0px 17px rgba(9, 128, 226, 0.9)',
+                  }}
                 >
                   Search
                 </Typography>
