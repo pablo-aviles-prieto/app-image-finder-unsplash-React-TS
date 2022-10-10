@@ -1,10 +1,10 @@
-import { BgroundImgContainer } from '../components/BgroundImgContainer';
+import { FavedImgsContainer } from '../components';
 
 export const LandPage: React.FC = () => {
   return (
     <>
-      <BgroundImgContainer />
-      <h1>Landing page</h1>;
+      <FavedImgsContainer />
+      <h1>Landing page</h1>
     </>
   );
 };

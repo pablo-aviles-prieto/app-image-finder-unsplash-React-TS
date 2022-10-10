@@ -9,8 +9,9 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
         <AppBar
           position='static'
           sx={{
-            bgcolor: 'rgba(2, 2, 2, 0.295)',
+            bgcolor: 'transparent',
             px: { xs: '1rem', md: '5rem' },
+            boxShadow: 'inset 0px -41px 34px -30px rgba(0 0 0 / 0.35)',
           }}
         >
           <Toolbar sx={{ px: '0' }}>
@@ -76,7 +77,7 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
           </Toolbar>
         </AppBar>
       </Box>
-      <main>{props.children}</main>
+      <div>{props.children}</div>
     </>
   );
 };

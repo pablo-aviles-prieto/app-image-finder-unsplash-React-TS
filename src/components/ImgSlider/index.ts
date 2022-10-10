@@ -1,0 +1,1 @@
+export { ImgSlider } from "./ImgSlider";

@@ -1,0 +1,89 @@
+.img-container {
+  position: relative;
+  height: 25.5rem;
+}
+
+.img-container > img {
+  z-index: -1;
+  position: absolute;
+  object-fit: cover;
+  width: 100%;
+  height: 870px;
+  bottom: 0;
+}
+
+.form {
+  display: flex;
+  margin: auto;
+  margin-top: 4rem;
+  width: 80%;
+  max-width: 51rem;
+  border-radius: 0.5rem;
+}
+
+.form > input {
+  color: #000;
+  width: 100%;
+  padding-left: 1rem;
+  font-size: 1.3rem;
+  height: 2.5rem;
+  border: 2px solid rgba(2, 101, 182, 0.664);
+  border-right: 0;
+  border-radius: 0.5rem 0 0 0.5rem;
+  background-color: rgb(255 255 255 / 80%);
+}
+
+.form > input:focus-visible {
+  border: 3px solid rgb(2, 101, 182);
+  border-right: 0;
+  outline: 0;
+}
+
+.form > button {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5rem;
+  border: 2px solid rgba(2, 101, 182, 0.664);
+  border-left: 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+  background-color: rgba(2, 101, 182, 0.864);
+  color: #fff;
+}
+
+.form > button:hover {
+  background-color: rgba(2, 101, 182, 1);
+}
+
+.form > button > svg {
+  width: 100%;
+}
+
+.form > button:hover svg {
+  transform: rotate(-90deg);
+}
+
+.faved-imgs-container {
+  position: inherit;
+  margin: auto;
+  margin-top: 3rem;
+  padding: 1rem;
+  height: 80%;
+  width: 90%;
+  max-width: 61rem;
+  background-color: rgba(0, 0, 0, 0.35);
+  text-align: center;
+  z-index: 1;
+  border-radius: 0.8rem;
+}
+
+.faved-imgs-container > p {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: white;
+}
+
+.div-shadow {
+  box-shadow: 0px 3px 12px 18px #ffffff;
+}
