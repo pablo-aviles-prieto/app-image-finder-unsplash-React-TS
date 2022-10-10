@@ -8,7 +8,7 @@
   border: 2px solid rgba(2, 101, 182, 0.364);
   border-radius: 0.5rem;
   background-color: rgba(0, 0, 0, 0.31) !important;
-  width: calc(100% - 0.4rem) !important;
+  width: calc(100% - 0.5rem) !important;
 }
 
 @media (min-width: 600px) {

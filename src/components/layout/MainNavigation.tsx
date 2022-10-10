@@ -75,8 +75,8 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
                 >
                   <Search
                     sx={{
-                      width: { xs: '2rem', sm: '2.5rem', md: '2.5rem' },
-                      height: { xs: '2rem', sm: '2.5rem', md: '2.5rem' },
+                      width: { xs: '2rem', sm: '2.5rem' },
+                      height: { xs: '2rem', sm: '2.5rem' },
                     }}
                   />
                 </IconButton>

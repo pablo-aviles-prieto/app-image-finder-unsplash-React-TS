@@ -90,11 +90,33 @@
   box-shadow: 0px 3px 12px 18px #ffffff;
 }
 
+.no-faved-imgs {
+  color: #fff;
+  margin: 2rem;
+}
+
+.no-faved-imgs p {
+  margin-top: 0.5rem;
+}
+
+.no-faved-imgs-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5rem;
+}
+
 @media (min-width: 600px) {
   .img-container {
     height: 25.5rem;
   }
   .faved-imgs-container {
     padding: 1rem;
+  }
+  .no-faved-imgs {
+    margin: 4rem;
+  }
+  .no-faved-imgs p {
+    margin-top: 1rem;
   }
 }
