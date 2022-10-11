@@ -1,12 +1,21 @@
 import { useState } from 'react';
+import Skeleton from '@mui/material/Skeleton';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import ListSubheader from '@mui/material/ListSubheader';
 import IconButton from '@mui/material/IconButton';
-import InfoIcon from '@mui/icons-material/Info';
+import { Favorite } from '@mui/icons-material';
 
 import styles from './GridImages.module.css';
+
+type loaderArrayType = {
+  img: string;
+  title: string;
+  author: string;
+  rows: number;
+  cols: number;
+  featured: boolean;
+}[];
 
 const itemData = [
   {
@@ -108,52 +117,66 @@ const itemData = [
 ];
 
 export const GridImages: React.FC = () => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState<boolean | string>(false);
+  const isLoading = false;
 
-  const onHoverHandler = () => {
-    setIsHovered(true);
-  };
+  const loaderArray: loaderArrayType = [...Array(10)].map((_, index) => ({
+    img: `${index}`,
+    title: '',
+    author: '',
+    rows: 2,
+    cols: 1,
+    featured: false,
+  }));
+  const data = isLoading ? loaderArray : itemData;
 
   return (
-    <div className={styles['grid-container']}>
+    <>
       <div className={styles['grid-container-title']}>
         <h2>Looking for some amazing pics?</h2>
       </div>
-      <ImageList cols={1}>
-        {/* <ImageListItem key='Subheader'>
-          <ListSubheader
-            component='h1'
-            className={styles['grid-container-title']}
-          >
-            Looking for some amazing pics?
-          </ListSubheader>
-        </ImageListItem> */}
-        {itemData.map((item) => (
-          <ImageListItem key={item.img}>
-            <img
-              // src={`${item.img}?w=248&fit=crop&auto=format`}
-              src={item.img}
-              srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              alt={item.title}
-              loading='lazy'
-            />
-            {
-              <ImageListItemBar
-                title={item.title}
-                subtitle={item.author}
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                    aria-label={`info about ${item.title}`}
-                  >
-                    <InfoIcon />
-                  </IconButton>
-                }
-              />
-            }
-          </ImageListItem>
-        ))}
-      </ImageList>
-    </div>
+      <div className={styles['grid-container']}>
+        <ImageList cols={1}>
+          {data.map((item) => (
+            <ImageListItem
+              key={item.img}
+              onMouseEnter={() => setIsHovered(item.img)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              {isLoading ? (
+                <Skeleton
+                  height={220}
+                  variant='rectangular'
+                  width='100%'
+                  className={styles['placeholder-card-grid']}
+                />
+              ) : (
+                <img
+                  src={item.img}
+                  srcSet={item.img}
+                  alt={item.title}
+                  loading='lazy'
+                />
+              )}
+              {isHovered !== item.img && (
+                <ImageListItemBar
+                  sx={{ minHeight: '60px' }}
+                  title={item.title}
+                  subtitle={item.author}
+                  actionIcon={
+                    <IconButton
+                      sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                      aria-label={`Fav ${item.title}`}
+                    >
+                      <Favorite />
+                    </IconButton>
+                  }
+                />
+              )}
+            </ImageListItem>
+          ))}
+        </ImageList>
+      </div>
+    </>
   );
 };

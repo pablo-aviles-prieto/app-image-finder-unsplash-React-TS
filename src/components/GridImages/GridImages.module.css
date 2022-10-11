@@ -1,14 +1,21 @@
 .grid-container {
-  margin: 3rem auto;
-  width: 90%;
-  max-width: 90rem;
+  background-color: rgba(7, 148, 148, 0.452);
+  padding: 3rem 0;
+  width: 100%;
+  box-shadow: inset 0px 21px 14px 0px #fff;
 }
 
 .grid-container-title {
-  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
   text-align: center;
   color: rgb(117, 117, 117);
   font-size: 0.8rem;
+}
+
+.placeholder-card-grid {
+  border-radius: 0.8rem;
+  background-color: rgba(0, 0, 0, 0.31) !important;
 }
 
 @media (min-width: 600px) {

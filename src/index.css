@@ -24,6 +24,21 @@
   ) !important;
 }
 
+.MuiImageList-root {
+  margin: auto;
+  width: 90%;
+  max-width: 85rem;
+}
+
+.MuiImageListItem-img {
+  border-radius: 0.8rem;
+}
+
+.MuiImageListItemBar-root {
+  border-bottom-left-radius: 0.8rem;
+  border-bottom-right-radius: 0.8rem;
+}
+
 @media (min-width: 600px) {
   .slick-prev:before,
   .slick-next:before {
@@ -47,5 +62,11 @@
 @media (min-width: 992px) {
   .MuiImageList-root {
     grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media (min-width: 1370px) {
+  .MuiImageList-root {
+    grid-template-columns: repeat(4, 1fr) !important;
   }
 }

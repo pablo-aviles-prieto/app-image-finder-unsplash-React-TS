@@ -62,17 +62,20 @@ const settings = {
 };
 
 export const ImgSlider: React.FC = () => {
+  const isLoading = false;
+
   const loaderArray: loaderArrayType = [...Array(5)].map((_, index) => ({
     url: `${index}`,
     img: '',
     title: '',
   }));
-  const data = false ? loaderArray : imgPlaceholder;
+
+  const data = isLoading ? loaderArray : imgPlaceholder;
 
   return (
     <Slider className={styles.slider} {...settings}>
       {data.map((item) =>
-        false ? (
+        isLoading ? (
           <Skeleton
             animation='wave'
             className={styles['placeholder-card']}
