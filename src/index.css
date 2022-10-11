@@ -37,3 +37,15 @@
     font-size: 12px !important;
   }
 }
+
+@media (min-width: 767px) {
+  .MuiImageList-root {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .MuiImageList-root {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
