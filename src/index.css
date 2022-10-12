@@ -26,12 +26,17 @@
 
 .MuiImageList-root {
   margin: auto;
-  width: 90%;
-  max-width: 85rem;
+  width: 94%;
+  max-width: 90rem;
+}
+
+.MuiImageListItem-root {
+  max-height: 340px;
 }
 
 .MuiImageListItem-img {
   border-radius: 0.8rem;
+  height: 100% !important;
 }
 
 .MuiImageListItemBar-root {
