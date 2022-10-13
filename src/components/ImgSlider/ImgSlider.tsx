@@ -40,7 +40,7 @@ const imgPlaceholder: { img: string; title: string; url: string }[] = [
   },
 ];
 
-const settings = {
+const sliderSettings = {
   dots: true,
   infinite: true,
   speed: 500,
@@ -73,7 +73,7 @@ export const ImgSlider: React.FC = () => {
   const data = isLoading ? loaderArray : imgPlaceholder;
 
   return (
-    <Slider className={styles.slider} {...settings}>
+    <Slider className={styles.slider} {...sliderSettings}>
       {data.map((item) =>
         isLoading ? (
           <Skeleton

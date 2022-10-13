@@ -1,6 +1,6 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { NotFound, MainNavigation } from './components';
-import { LandPage } from './pages';
+import { LandPage, Search } from './pages';
 
 import './index.css';
 
@@ -10,7 +10,8 @@ const App: React.FC = () => {
       <MainNavigation>
         <Routes>
           <Route path='/' element={<LandPage />} />
-          <Route path='*' element={<NotFound />} />
+          <Route path='/search' element={<Search />} />
+          <Route path='*' element={<Navigate to='/' replace />} />
         </Routes>
       </MainNavigation>
     </div>
