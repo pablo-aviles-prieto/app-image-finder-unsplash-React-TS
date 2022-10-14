@@ -1,3 +1,13 @@
+.logo-container {
+  width: 100%;
+}
+
+.restore-style {
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
 .fav-box,
 .search-box {
   cursor: pointer;

@@ -44,6 +44,15 @@
   border-bottom-right-radius: 0.8rem;
 }
 
+a.active {
+  padding-bottom: 0.25rem;
+  border-bottom: 4px solid rgba(166, 214, 253, 0.864);
+}
+
+a.active h3 {
+  color: rgb(171, 213, 247);
+}
+
 @media (min-width: 600px) {
   .slick-prev:before,
   .slick-next:before {

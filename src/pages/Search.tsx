@@ -1,8 +1,22 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { MainContainer, MainContainerCard } from '../components';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { fetchPhotos } from '../components/store/searchSlice';
+import { MainContainer, MainContainerCard, GridImages } from '../components';
 
 export const Search: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (queryImgs) {
+      dispatch(
+        fetchPhotos(
+          `https://api.unsplash.com/search/photos/?per_page=30&query=${queryImgs}`
+        )
+      );
+    }
+  }, [dispatch]);
+
   const useQuery = () => {
     const { search } = useLocation();
     return React.useMemo(() => new URLSearchParams(search), [search]);
@@ -15,7 +29,7 @@ export const Search: React.FC = () => {
 
   return (
     <>
-      <MainContainer>
+      <MainContainer sectionTitle='Search for images or categories'>
         <MainContainerCard>
           <>
             <h1 style={{ color: 'white' }}>Test</h1>
@@ -24,6 +38,7 @@ export const Search: React.FC = () => {
           </>
         </MainContainerCard>
       </MainContainer>
+      <GridImages forceBarDisplaying={false} />
     </>
   );
 };

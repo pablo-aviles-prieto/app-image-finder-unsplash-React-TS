@@ -6,30 +6,34 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import { RemoveRedEye } from '@mui/icons-material';
 import { useAppSelector } from '../../app/hooks';
-import { CategoryObj } from '../store/searchSlice';
+import { CategoryPhotoObj } from '../store/searchSlice';
 
 import styles from './GridImages.module.css';
 
-export const GridImages: React.FC = () => {
+export const GridImages: React.FC<{ forceBarDisplaying: boolean }> = ({
+  forceBarDisplaying,
+}) => {
   const [isHovered, setIsHovered] = useState<boolean | string>(false);
-  const photosList = useAppSelector((state) => state.search.photoList);
+  const photosList = useAppSelector((state) => state.search.unsplashList);
   const statusAPI = useAppSelector((state) => state.search.status);
 
-  const loaderArray: CategoryObj[] = [...Array(10)].map((_, index) => ({
+  const loaderArray: CategoryPhotoObj[] = [...Array(10)].map((_, index) => ({
     id: `${index}`,
-    title: '',
+    description: '',
+    width: '',
+    height: '',
     totalPhotos: 0,
+    likes: 0,
+    urls: { full: '', small: '', thumb: '' },
     tags: [{ title: '' }],
+    author: { name: '', link: '' },
     imgUrl: '',
     link: '',
   }));
-  const data = statusAPI === 'idle' ? photosList : loaderArray;  
+  const data = statusAPI === 'idle' ? photosList : loaderArray;
 
   return (
     <>
-      <div className={styles['grid-container-title']}>
-        <h2>Looking for some amazing pics?</h2>
-      </div>
       <div className={styles['grid-container']}>
         <ImageList cols={1}>
           {data.map((obj) => (
@@ -47,22 +51,30 @@ export const GridImages: React.FC = () => {
                 />
               ) : (
                 <img
-                  src={obj.imgUrl}
-                  srcSet={obj.imgUrl}
-                  alt={obj.title}
+                  src={obj?.imgUrl ? obj.imgUrl : obj.urls.small}
+                  alt={obj.description}
                   loading='lazy'
-                  onClick={() => {console.log('link', obj.link)}}
+                  onClick={() => {
+                    console.log('link', obj?.link ? obj.link : obj.id);
+                  }}
                 />
               )}
-              {isHovered !== obj.id && (
+              {(isHovered === obj.id || forceBarDisplaying) && (
                 <ImageListItemBar
                   sx={{ minHeight: '60px' }}
-                  title={obj.title}
-                  subtitle={`${obj.totalPhotos} Total photos`}
+                  title={obj.description}
+                  subtitle={
+                    obj?.totalPhotos
+                      ? `${obj.totalPhotos} Total photos`
+                      : `${obj.likes} likes`
+                  }
                   actionIcon={
                     <IconButton
+                      onClick={() =>
+                        console.log(`checking eye of ${obj.description}`)
+                      }
                       sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                      aria-label={`Fav ${obj.title}`}
+                      aria-label={`${obj.description}`}
                     >
                       <RemoveRedEye />
                     </IconButton>

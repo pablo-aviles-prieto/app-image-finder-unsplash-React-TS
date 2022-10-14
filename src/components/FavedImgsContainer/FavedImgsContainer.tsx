@@ -7,42 +7,40 @@ export const FavedImgsContainer: React.FC = () => {
   const hasFavImgs = true;
 
   return (
-    <MainContainer>
+    <>
       {hasFavImgs ? (
-        <MainContainerCard>
+        <>
           <p className={styles['faved-title']}>Your fav'ed images</p>
           <ImgSlider />
-        </MainContainerCard>
+        </>
       ) : (
-        <MainContainerCard>
-          <div className={styles['no-faved-imgs']}>
-            <h2>You can search and save your favorite images!</h2>
-            <p>Your favorited images will be showcased right here</p>
-            <div className={styles['no-faved-imgs-icons']}>
-              <ImageSearch
-                sx={{
-                  width: { xs: '2rem', sm: '2.5rem', md: '3rem' },
-                  height: { xs: '2rem', sm: '2.5rem', md: '3rem' },
-                }}
-              />
-              <ArrowRight />
-              <Favorite
-                sx={{
-                  width: { xs: '2rem', sm: '2.5rem', md: '3rem' },
-                  height: { xs: '2rem', sm: '2.5rem', md: '3rem' },
-                }}
-              />
-              <ArrowRight />
-              <Image
-                sx={{
-                  width: { xs: '2rem', sm: '2.5rem', md: '3rem' },
-                  height: { xs: '2rem', sm: '2.5rem', md: '3rem' },
-                }}
-              />
-            </div>
+        <div className={styles['no-faved-imgs']}>
+          <h2>You can search and save your favourite images!</h2>
+          <p>Your favourited images will be showcased right here</p>
+          <div className={styles['no-faved-imgs-icons']}>
+            <ImageSearch
+              sx={{
+                width: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+                height: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+              }}
+            />
+            <ArrowRight />
+            <Favorite
+              sx={{
+                width: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+                height: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+              }}
+            />
+            <ArrowRight />
+            <Image
+              sx={{
+                width: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+                height: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+              }}
+            />
           </div>
-        </MainContainerCard>
+        </div>
       )}
-    </MainContainer>
+    </>
   );
 };

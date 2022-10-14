@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { Box, AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 import { Search, Favorite } from '@mui/icons-material';
 
@@ -17,16 +18,20 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
           }}
         >
           <Toolbar sx={{ px: '0' }}>
-            <Typography
-              fontSize={{ xs: '2rem', sm: '2.5rem', md: '3rem' }}
-              component='h2'
-              sx={{
-                flexGrow: 1,
-                textShadow: '0px 0px 17px rgba(9, 128, 226, 0.9)',
-              }}
-            >
-              StorIMG
-            </Typography>
+            <div className={styles['logo-container']}>
+              <NavLink className={styles['restore-style']} to='/home'>
+                <Typography
+                  fontSize={{ xs: '2rem', sm: '2.5rem', md: '3rem' }}
+                  component='span'
+                  sx={{
+                    flexGrow: 1,
+                    textShadow: '0px 0px 17px rgba(9, 128, 226, 0.9)',
+                  }}
+                >
+                  StorIMG
+                </Typography>
+              </NavLink>
+            </div>
             <Box
               sx={{
                 display: 'flex',
@@ -34,64 +39,72 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
                 gap: { xs: '1rem', sm: '3rem' },
               }}
             >
-              <Box
-                className={styles['fav-box']}
-                sx={{ display: 'flex', alignItems: 'center' }}
-              >
-                <IconButton
-                  size='large'
-                  edge='start'
-                  color='inherit'
-                  aria-label='fav'
-                >
-                  <Favorite
-                    sx={{
-                      width: { xs: '2rem', sm: '2.5rem', md: '2.5rem' },
-                      height: { xs: '2rem', sm: '2.5rem', md: '2.5rem' },
-                    }}
-                  />
-                </IconButton>
-                <Typography
-                  fontSize={{ sm: '1.3rem', md: '1.6rem', lg: '2rem' }}
-                  component='h3'
+              <NavLink className={styles['restore-style']} to='/favourites'>
+                <Box
+                  className={styles['fav-box']}
                   sx={{
-                    flexGrow: 1,
-                    display: { xs: 'none', sm: 'block' },
-                    textShadow: '0px 0px 17px rgba(9, 128, 226, 0.9)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    minWidth: { sm: '153px', md: '180px', lg: '205px' },
                   }}
                 >
-                  Favorites
-                </Typography>
-              </Box>
-              <Box
-                className={styles['search-box']}
-                sx={{ display: 'flex', alignItems: 'center' }}
-              >
-                <IconButton
-                  size='large'
-                  edge='start'
-                  color='inherit'
-                  aria-label='search'
-                >
-                  <Search
+                  <IconButton
+                    size='large'
+                    edge='start'
+                    color='inherit'
+                    aria-label='fav'
+                  >
+                    <Favorite
+                      sx={{
+                        width: { xs: '2rem', sm: '2.5rem', md: '2.5rem' },
+                        height: { xs: '2rem', sm: '2.5rem', md: '2.5rem' },
+                      }}
+                    />
+                  </IconButton>
+                  <Typography
+                    fontSize={{ sm: '1.3rem', md: '1.6rem', lg: '2rem' }}
+                    component='h3'
                     sx={{
-                      width: { xs: '2rem', sm: '2.5rem' },
-                      height: { xs: '2rem', sm: '2.5rem' },
+                      flexGrow: 1,
+                      display: { xs: 'none', sm: 'block' },
+                      textShadow: '0px 0px 17px rgba(9, 128, 226, 0.9)',
                     }}
-                  />
-                </IconButton>
-                <Typography
-                  fontSize={{ sm: '1.3rem', md: '1.6rem', lg: '2rem' }}
-                  component='h3'
-                  sx={{
-                    flexGrow: 1,
-                    display: { xs: 'none', sm: 'block' },
-                    textShadow: '0px 0px 17px rgba(9, 128, 226, 0.9)',
-                  }}
+                  >
+                    My photos
+                  </Typography>
+                </Box>
+              </NavLink>
+              <NavLink className={styles['restore-style']} to='/search'>
+                <Box
+                  className={styles['search-box']}
+                  sx={{ display: 'flex', alignItems: 'center' }}
                 >
-                  Search
-                </Typography>
-              </Box>
+                  <IconButton
+                    size='large'
+                    edge='start'
+                    color='inherit'
+                    aria-label='search'
+                  >
+                    <Search
+                      sx={{
+                        width: { xs: '2rem', sm: '2.5rem' },
+                        height: { xs: '2rem', sm: '2.5rem' },
+                      }}
+                    />
+                  </IconButton>
+                  <Typography
+                    fontSize={{ sm: '1.3rem', md: '1.6rem', lg: '2rem' }}
+                    component='h3'
+                    sx={{
+                      flexGrow: 1,
+                      display: { xs: 'none', sm: 'block' },
+                      textShadow: '0px 0px 17px rgba(9, 128, 226, 0.9)',
+                    }}
+                  >
+                    Search
+                  </Typography>
+                </Box>
+              </NavLink>
             </Box>
           </Toolbar>
         </AppBar>
