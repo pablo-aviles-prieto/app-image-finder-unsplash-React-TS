@@ -15,7 +15,7 @@ export const searchPhotosAPI: (
   return response.json();
 };
 
-export const searchCategoriesAPI: (url: string) => Promise<any[]> = async (
+export const searchCategoriesAPI: (url: string) => Promise<FetchPhotoResults> = async (
   url
 ) => {
   const response = await fetch(url, {

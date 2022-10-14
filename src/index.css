@@ -35,6 +35,7 @@
 }
 
 .MuiImageListItem-img {
+  cursor: pointer;
   border-radius: 0.8rem;
   height: 100% !important;
 }

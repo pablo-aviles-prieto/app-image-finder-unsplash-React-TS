@@ -26,7 +26,7 @@ export interface CategoryPhotoObj {
     name: string | null;
     link: string | null;
   };
-  imgUrl: string;
+  imgCat: string;
   link: string;
 }
 
@@ -72,7 +72,7 @@ const initialState: SearchState = {
       urls: { full: '', small: '', thumb: '' },
       tags: [{ title: '' }],
       author: { name: '', link: '' },
-      imgUrl: '',
+      imgCat: '',
       link: '',
     },
   ],
@@ -83,7 +83,11 @@ export const fetchPhotos = createAsyncThunk(
   'search/searchPhotos',
   async (url: string): Promise<any[]> => {
     const response = await searchPhotosAPI(url);
-    const photoList = response.results
+    const dataObtained = response?.results
+      ? response.results
+      : (response as unknown as any[]);
+
+    return dataObtained
       .filter((imgObj) => !imgObj.sponsorship)
       .map((filteredObj) => ({
         id: filteredObj.id,
@@ -103,21 +107,23 @@ export const fetchPhotos = createAsyncThunk(
           link: filteredObj.user.links.html,
         },
       }));
-    return photoList;
   }
 );
 
-export const fetchPhotosCategories = createAsyncThunk(
+export const fetchCategories = createAsyncThunk(
   'search/searchPhotos',
   async (url: string): Promise<any[]> => {
     const response = await searchCategoriesAPI(url);
-    return response.map((obj) => ({
+
+    const dataObtained = response?.results
+      ? response.results
+      : (response as unknown as any[]);
+    return dataObtained.map((obj) => ({
       id: obj.id,
       description: obj.title,
       totalPhotos: obj['total_photos'],
       tags: obj.tags.map((tag: { title: string }) => tag.title),
-      imgUrl: obj['cover_photo'].urls.small,
-      link: `${obj.links.photos}/?client_id=npSG8DeRNQsPiJv00JjJfo6d_hN-n47wb4yWQ8sjTcs&per_page=30`,
+      imgCat: obj['cover_photo'].urls.small,
     }));
   }
 );
@@ -147,14 +153,14 @@ export const searchSlice = createSlice({
   extraReducers: (builder) => {
     // Reusing the same action type (search/searchPhotos) for the thunks
     builder
-      .addCase(fetchPhotosCategories.pending, (state) => {
+      .addCase(fetchCategories.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(fetchPhotosCategories.fulfilled, (state, action) => {
+      .addCase(fetchCategories.fulfilled, (state, action) => {
         state.status = 'idle';
         state.unsplashList = action.payload;
       })
-      .addCase(fetchPhotosCategories.rejected, (state) => {
+      .addCase(fetchCategories.rejected, (state) => {
         state.status = 'failed';
       });
   },

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { fetchPhotosCategories } from '../components/store/searchSlice';
+import { fetchCategories } from '../components/store/searchSlice';
 import {
   FavedImgsContainer,
   GridImages,
@@ -10,14 +11,19 @@ import {
 
 export const LandPage: React.FC = () => {
   // const status = useAppSelector((state) => state.search.status);
-  // const photos = useAppSelector((state) => state.search.photoList);
+  // const photos = useAppSelector((state) => state.search.unsplashList);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(
-      fetchPhotosCategories('https://api.unsplash.com/collections/?per_page=30')
+      fetchCategories('https://api.unsplash.com/collections/?per_page=30')
     );
   }, [dispatch]);
+
+  const clickImgHandler = (id: string) => {
+    navigate(`/search?cat=${id}`);
+  };
 
   return (
     <>
@@ -26,7 +32,10 @@ export const LandPage: React.FC = () => {
           <FavedImgsContainer />
         </MainContainerCard>
       </MainContainer>
-      <GridImages forceBarDisplaying={true} />
+      <GridImages
+        forceBarDisplaying={true}
+        onClickImgHandler={clickImgHandler}
+      />
     </>
   );
 };

@@ -10,8 +10,14 @@ import { CategoryPhotoObj } from '../store/searchSlice';
 
 import styles from './GridImages.module.css';
 
-export const GridImages: React.FC<{ forceBarDisplaying: boolean }> = ({
+type GridImagesProps = {
+  forceBarDisplaying: boolean;
+  onClickImgHandler: (id: string) => void;
+};
+
+export const GridImages: React.FC<GridImagesProps> = ({
   forceBarDisplaying,
+  onClickImgHandler,
 }) => {
   const [isHovered, setIsHovered] = useState<boolean | string>(false);
   const photosList = useAppSelector((state) => state.search.unsplashList);
@@ -27,10 +33,13 @@ export const GridImages: React.FC<{ forceBarDisplaying: boolean }> = ({
     urls: { full: '', small: '', thumb: '' },
     tags: [{ title: '' }],
     author: { name: '', link: '' },
-    imgUrl: '',
+    imgCat: '',
     link: '',
   }));
   const data = statusAPI === 'idle' ? photosList : loaderArray;
+
+  console.log('photosList', photosList);
+  console.log('statusAPI', statusAPI);
 
   return (
     <>
@@ -51,12 +60,10 @@ export const GridImages: React.FC<{ forceBarDisplaying: boolean }> = ({
                 />
               ) : (
                 <img
-                  src={obj?.imgUrl ? obj.imgUrl : obj.urls.small}
+                  src={obj?.imgCat ? obj.imgCat : obj.urls.small}
                   alt={obj.description}
                   loading='lazy'
-                  onClick={() => {
-                    console.log('link', obj?.link ? obj.link : obj.id);
-                  }}
+                  onClick={() => onClickImgHandler(obj.id)}
                 />
               )}
               {(isHovered === obj.id || forceBarDisplaying) && (
