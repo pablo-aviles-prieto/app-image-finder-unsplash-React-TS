@@ -1,65 +1,88 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { fetchPhotos, fetchCategories } from '../components/store/searchSlice';
+import { useQuery } from '../utils';
 import {
-  fetchPhotos,
-  fetchCategories,
-} from '../components/store/searchSlice';
-import { MainContainer, MainContainerCard, GridImages } from '../components';
+  MainContainer,
+  MainContainerCard,
+  GridImages,
+  SearchInput,
+} from '../components';
 
 export const Search: React.FC = () => {
-  const [forceBarStatus, setForceBarStatus] = useState<boolean>(false);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const queryCategories = useQuery().get('imgscat');
+  const queryImgs = useQuery().get('imgs');
 
   useEffect(() => {
     if (queryImgs) {
-      setForceBarStatus(false);
+      const parsedString = queryImgs.trim().replace(/(\s)+/g, '%20');
       dispatch(
-        fetchPhotos(
-          `https://api.unsplash.com/search/photos/?per_page=30&query=${queryImgs}`
-        )
+        fetchPhotos({
+          url: `https://api.unsplash.com/search/photos/?per_page=30&page=1&query=${parsedString}`,
+          updateTotalPages: true,
+        })
       );
       return;
     }
     if (queryCategories) {
-      console.log('check');
-      setForceBarStatus(true);
       dispatch(
-        fetchPhotos(
-          `https://api.unsplash.com/collections/${queryCategories}/photos/?per_page=30`
-        )
+        fetchPhotos({
+          url: `https://api.unsplash.com/collections/${queryCategories}/photos/?per_page=30&page=1`,
+          updateTotalPages: true,
+        })
       );
       return;
     }
-  }, [dispatch, setForceBarStatus]);
+    console.log('queryparams', queryImgs);
+    dispatch(
+      fetchPhotos({
+        url: `https://api.unsplash.com/photos/random/?count=30&page=1`,
+        updateTotalPages: true,
+      })
+    );
+  }, [dispatch, queryImgs, queryCategories]);
 
   const clickImgHandler = (id: string) => {
     console.log('id', id);
   };
 
-  const useQuery = () => {
-    const { search } = useLocation();
-    return React.useMemo(() => new URLSearchParams(search), [search]);
+  const submitFormHandler = (e: React.FormEvent, inputValue: string) => {
+    e.preventDefault();
+    const enteredSearch = inputValue.trim();
+    const parsedSearch = enteredSearch.replace(/(\s)+/g, '%20');
+    navigate(`/search?imgs=${parsedSearch}`);
   };
-
-  const queryCategories = useQuery().get('cat');
-  const queryImgs = useQuery().get('imgs');
-  console.log('queryCategories', queryCategories);
-  console.log('queryImgs', queryImgs);
 
   return (
     <>
       <MainContainer sectionTitle='Search for images or categories'>
         <MainContainerCard>
           <>
-            <h1 style={{ color: 'white' }}>Test</h1>
-            <h3 style={{ color: 'cyan' }}>Categories: {queryCategories}</h3>
-            <h3 style={{ color: 'cyan' }}>Images: {queryImgs}</h3>
+            <div>
+              <h1 style={{ color: 'white' }}>
+                Search between categories or images switching the button
+              </h1>
+            </div>
+            <div>
+              <SearchInput
+                placeholderText='Search images...'
+                onSubmitFormHandler={submitFormHandler}
+              />
+            </div>
+            <div>
+              <br />
+              <h3 style={{ color: 'cyan' }}>Categories: {queryCategories}</h3>
+              <h3 style={{ color: 'cyan' }}>Images: {queryImgs}</h3>
+            </div>
           </>
         </MainContainerCard>
       </MainContainer>
       <GridImages
-        forceBarDisplaying={forceBarStatus}
+        forceBarDisplaying={false}
         onClickImgHandler={clickImgHandler}
       />
     </>

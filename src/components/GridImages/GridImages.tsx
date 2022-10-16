@@ -1,12 +1,17 @@
-import { useState } from 'react';
-import Skeleton from '@mui/material/Skeleton';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import IconButton from '@mui/material/IconButton';
-import { RemoveRedEye } from '@mui/icons-material';
-import { useAppSelector } from '../../app/hooks';
-import { CategoryPhotoObj } from '../store/searchSlice';
+import {
+  Skeleton,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+  IconButton,
+  Pagination,
+  Stack,
+} from '@mui/material';
+import { RemoveRedEye, Favorite } from '@mui/icons-material';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { CategoryPhotoObj, fetchPhotos } from '../store/searchSlice';
+import { fetchCategories } from '../../components/store/searchSlice';
+import { replacingPageNumberInLink } from '../../utils/regex';
 
 import styles from './GridImages.module.css';
 
@@ -19,11 +24,14 @@ export const GridImages: React.FC<GridImagesProps> = ({
   forceBarDisplaying,
   onClickImgHandler,
 }) => {
-  const [isHovered, setIsHovered] = useState<boolean | string>(false);
-  const photosList = useAppSelector((state) => state.search.unsplashList);
+  const photosList = useAppSelector((state) => state.search.unsplashData);
+  const endpointCalled = useAppSelector((state) => state.search.endpointCalled);
   const statusAPI = useAppSelector((state) => state.search.status);
+  const dispatch = useAppDispatch();
+  console.log('photosList', photosList);
 
   const loaderArray: CategoryPhotoObj[] = [...Array(10)].map((_, index) => ({
+    paginationInfo: { totalCount: 0, totalPages: 0 },
     id: `${index}`,
     description: '',
     width: '',
@@ -36,21 +44,14 @@ export const GridImages: React.FC<GridImagesProps> = ({
     imgCat: '',
     link: '',
   }));
-  const data = statusAPI === 'idle' ? photosList : loaderArray;
-
-  console.log('photosList', photosList);
-  console.log('statusAPI', statusAPI);
+  const data = statusAPI === 'idle' ? photosList.parsedArray : loaderArray;
 
   return (
     <>
       <div className={styles['grid-container']}>
         <ImageList cols={1}>
           {data.map((obj) => (
-            <ImageListItem
-              key={obj.id}
-              onMouseEnter={() => setIsHovered(obj.id)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
+            <ImageListItem key={obj.id}>
               {statusAPI !== 'idle' ? (
                 <Skeleton
                   height={320}
@@ -66,31 +67,72 @@ export const GridImages: React.FC<GridImagesProps> = ({
                   onClick={() => onClickImgHandler(obj.id)}
                 />
               )}
-              {(isHovered === obj.id || forceBarDisplaying) && (
-                <ImageListItemBar
-                  sx={{ minHeight: '60px' }}
-                  title={obj.description}
-                  subtitle={
-                    obj?.totalPhotos
-                      ? `${obj.totalPhotos} Total photos`
-                      : `${obj.likes} likes`
-                  }
-                  actionIcon={
+              <ImageListItemBar
+                className={forceBarDisplaying ? 'override-opacity' : ''}
+                sx={{ minHeight: '60px' }}
+                title={obj.description}
+                subtitle={
+                  obj?.totalPhotos
+                    ? `${obj.totalPhotos} Total photos`
+                    : `${obj.likes} likes`
+                }
+                actionIcon={
+                  <>
+                    {!forceBarDisplaying && (
+                      <IconButton
+                        onClick={() => console.log('check')}
+                        sx={{
+                          color: 'rgba(255, 255, 255, 0.54)',
+                          padding: '4px',
+                        }}
+                        aria-label={`${obj.description}`}
+                      >
+                        <Favorite />
+                      </IconButton>
+                    )}
                     <IconButton
-                      onClick={() =>
-                        console.log(`checking eye of ${obj.description}`)
-                      }
-                      sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                      onClick={() => onClickImgHandler(obj.id)}
+                      sx={{
+                        color: 'rgba(255, 255, 255, 0.54)',
+                        padding: '4px',
+                      }}
                       aria-label={`${obj.description}`}
                     >
                       <RemoveRedEye />
                     </IconButton>
-                  }
-                />
-              )}
+                  </>
+                }
+              />
             </ImageListItem>
           ))}
         </ImageList>
+        {photosList.totalPages > 0 && (
+          <Stack spacing={2} sx={{ alignItems: 'center', marginTop: '2rem' }}>
+            <Pagination
+              count={photosList.totalPages}
+              color='primary'
+              size='large'
+              siblingCount={2}
+              onChange={(e, page) => {
+                const parsedLink = replacingPageNumberInLink(
+                  endpointCalled,
+                  page
+                );
+                const isPhotosEndpoint = parsedLink.match(/photos/gi);
+                isPhotosEndpoint
+                  ? dispatch(
+                      fetchPhotos({ url: parsedLink, updateTotalPages: false })
+                    )
+                  : dispatch(
+                      fetchCategories({
+                        url: parsedLink,
+                        updateTotalPages: false,
+                      })
+                    );
+              }}
+            />
+          </Stack>
+        )}
       </div>
     </>
   );

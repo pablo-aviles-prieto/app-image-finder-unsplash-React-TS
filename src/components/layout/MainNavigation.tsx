@@ -8,7 +8,7 @@ import styles from './MainNavigation.module.css';
 export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
   return (
     <>
-      <Box component='nav' sx={{ flexGrow: 1 }}>
+      <Box component='nav' sx={{ flexGrow: 1, marginBottom: '4rem' }}>
         <AppBar
           position='static'
           sx={{

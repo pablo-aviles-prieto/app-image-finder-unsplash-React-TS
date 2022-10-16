@@ -45,6 +45,26 @@
   border-bottom-right-radius: 0.8rem;
 }
 
+.MuiImageListItem-root .MuiImageListItemBar-root {
+  opacity: 0;
+  transition: all 0.3s ease-out;
+}
+
+.MuiImageListItem-root:hover .MuiImageListItemBar-root {
+  opacity: 1;
+  transition: all 0.3s ease-out;
+}
+
+.MuiImageListItemBar-actionIcon {
+  display: flex;
+  justify-content: end;
+  margin-right: 4px;
+  height: 60px;
+  padding: 7px 0;
+  align-items: start;
+  min-width: 64px;
+}
+
 a.active {
   padding-bottom: 0.25rem;
   border-bottom: 4px solid rgba(166, 214, 253, 0.864);
@@ -52,6 +72,10 @@ a.active {
 
 a.active h3 {
   color: rgb(171, 213, 247);
+}
+
+.override-opacity {
+  opacity: 1 !important;
 }
 
 @media (min-width: 600px) {

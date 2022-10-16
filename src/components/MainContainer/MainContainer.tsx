@@ -1,5 +1,4 @@
 import React from 'react';
-import { SearchInput } from '../SearchInput/SearchInput';
 
 import styles from './MainContainer.module.css';
 
@@ -16,7 +15,6 @@ export const MainContainer: React.FC<Props> = ({ children, sectionTitle }) => {
           src={`${process.env.PUBLIC_URL}bground3.jpg`}
           alt='An incredible mountain view'
         />
-        <SearchInput />
         {children}
       </div>
       <div className={styles['div-shadow']}></div>

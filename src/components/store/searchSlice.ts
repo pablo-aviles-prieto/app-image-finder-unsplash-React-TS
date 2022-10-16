@@ -2,11 +2,26 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../app/store';
 import { searchPhotosAPI, searchCategoriesAPI } from './searchPhotosAPI';
 
-// When we make a GET req to search/photos endpoint it doesnt return the array directly, it returns an obj with the array inside a results prop.
-export interface FetchPhotoResults {
+export interface PaginationInfo {
+  totalCount: number;
+  totalPages: number;
+}
+
+export interface FetchPhotoData {
   total: number;
   total_pages: number;
   results: any[];
+}
+
+export interface FetchPhotoResults {
+  responseObj: Promise<FetchPhotoData>;
+  numbersOfPages: number;
+}
+
+export interface ParsedFetchedResults {
+  paginationInfo: PaginationInfo | null;
+  parsedArray: CategoryPhotoObj[];
+  totalPages: number;
 }
 
 export interface CategoryPhotoObj {
@@ -56,38 +71,56 @@ export interface CategoryObj {
 }
 
 interface SearchState {
-  unsplashList: CategoryPhotoObj[];
+  unsplashData: ParsedFetchedResults;
+  endpointCalled: string;
   status: 'idle' | 'loading' | 'failed';
 }
 
 const initialState: SearchState = {
-  unsplashList: [
-    {
-      id: '',
-      description: '',
-      width: '',
-      height: '',
-      totalPhotos: 0,
-      likes: 0,
-      urls: { full: '', small: '', thumb: '' },
-      tags: [{ title: '' }],
-      author: { name: '', link: '' },
-      imgCat: '',
-      link: '',
-    },
-  ],
+  unsplashData: {
+    paginationInfo: null,
+    parsedArray: [
+      {
+        id: '',
+        description: '',
+        width: '',
+        height: '',
+        totalPhotos: 0,
+        likes: 0,
+        urls: { full: '', small: '', thumb: '' },
+        tags: [{ title: '' }],
+        author: { name: '', link: '' },
+        imgCat: '',
+        link: '',
+      },
+    ],
+    totalPages: 0,
+  },
+  endpointCalled: '',
   status: 'loading',
 };
 
 export const fetchPhotos = createAsyncThunk(
   'search/searchPhotos',
-  async (url: string): Promise<any[]> => {
-    const response = await searchPhotosAPI(url);
-    const dataObtained = response?.results
-      ? response.results
-      : (response as unknown as any[]);
+  async (params: {
+    url: string;
+    updateTotalPages: boolean;
+  }): Promise<{
+    paginationInfo: PaginationInfo | null;
+    parsedArray: any[];
+    totalPages: number | null;
+    endpointCalled: string;
+  }> => {
+    const response = await searchPhotosAPI(params.url);
+    const dataParsed = await response.responseObj;
+    const dataObtained = dataParsed?.results
+      ? dataParsed.results
+      : (dataParsed as unknown as any[]);
+    const paginationInfo: PaginationInfo | null = dataParsed?.results
+      ? { totalCount: dataParsed.total, totalPages: dataParsed['total_pages'] }
+      : null;
 
-    return dataObtained
+    const parsedArray = dataObtained
       .filter((imgObj) => !imgObj.sponsorship)
       .map((filteredObj) => ({
         id: filteredObj.id,
@@ -107,24 +140,50 @@ export const fetchPhotos = createAsyncThunk(
           link: filteredObj.user.links.html,
         },
       }));
+
+    return {
+      paginationInfo,
+      parsedArray,
+      totalPages: params.updateTotalPages ? response.numbersOfPages : null,
+      endpointCalled: params.url,
+    };
   }
 );
 
 export const fetchCategories = createAsyncThunk(
   'search/searchPhotos',
-  async (url: string): Promise<any[]> => {
-    const response = await searchCategoriesAPI(url);
+  async (params: {
+    url: string;
+    updateTotalPages: boolean;
+  }): Promise<{
+    paginationInfo: PaginationInfo | null;
+    parsedArray: any[];
+    totalPages: number | null;
+    endpointCalled: string;
+  }> => {
+    const response = await searchCategoriesAPI(params.url);
+    const dataParsed = await response.responseObj;
+    const dataObtained = dataParsed?.results
+      ? dataParsed.results
+      : (dataParsed as unknown as any[]);
+    const paginationInfo: PaginationInfo | null = dataParsed?.results
+      ? { totalCount: dataParsed.total, totalPages: dataParsed['total_pages'] }
+      : null;
 
-    const dataObtained = response?.results
-      ? response.results
-      : (response as unknown as any[]);
-    return dataObtained.map((obj) => ({
+    const parsedArray = dataObtained.map((obj) => ({
       id: obj.id,
       description: obj.title,
       totalPhotos: obj['total_photos'],
       tags: obj.tags.map((tag: { title: string }) => tag.title),
       imgCat: obj['cover_photo'].urls.small,
     }));
+
+    return {
+      paginationInfo,
+      parsedArray,
+      totalPages: params.updateTotalPages ? response.numbersOfPages : null,
+      endpointCalled: params.url,
+    };
   }
 );
 
@@ -158,7 +217,18 @@ export const searchSlice = createSlice({
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.unsplashList = action.payload;
+        const { paginationInfo, parsedArray, totalPages, endpointCalled } =
+          action.payload;
+        if (totalPages === null) {
+          state.unsplashData = {
+            paginationInfo,
+            parsedArray,
+            totalPages: state.unsplashData.totalPages,
+          };
+        } else {
+          state.unsplashData = { paginationInfo, parsedArray, totalPages };
+        }
+        state.endpointCalled = endpointCalled;
       })
       .addCase(fetchCategories.rejected, (state) => {
         state.status = 'failed';
