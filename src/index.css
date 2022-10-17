@@ -74,6 +74,11 @@ a.active h3 {
   color: rgb(171, 213, 247);
 }
 
+a#author-head-title {
+  text-decoration: none;
+  color: inherit;
+} 
+
 .override-opacity {
   opacity: 1 !important;
 }

@@ -6,8 +6,9 @@ import {
   IconButton,
   Pagination,
   Stack,
+  Link,
 } from '@mui/material';
-import { RemoveRedEye, Favorite } from '@mui/icons-material';
+import { RemoveRedEye, Favorite, PhotoCamera } from '@mui/icons-material';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { CategoryPhotoObj, fetchPhotos } from '../store/searchSlice';
 import { fetchCategories } from '../../components/store/searchSlice';
@@ -45,13 +46,76 @@ export const GridImages: React.FC<GridImagesProps> = ({
     link: '',
   }));
   const data = statusAPI === 'idle' ? photosList.parsedArray : loaderArray;
+  console.log('data', data);
 
   return (
     <>
-      <div className={styles['grid-container']}>
+      <div
+        style={{
+          backgroundColor:
+            data.length === 0
+              ? 'rgba(172, 17, 5, 0.555)'
+              : 'rgba(7, 148, 148, 0.452)',
+          minHeight: '20rem',
+        }}
+        className={styles['grid-container']}
+      >
+        {data.length === 0 && (
+          <h1
+            style={{
+              color: 'rgba(74, 50, 182, 0.993)',
+              width: '90%',
+              margin: 'auto',
+              textAlign: 'center',
+            }}
+          >
+            Sorry, there are no images with the keywords/filters introduced!
+          </h1>
+        )}
         <ImageList cols={1}>
           {data.map((obj) => (
             <ImageListItem key={obj.id}>
+              {!forceBarDisplaying && (
+                <ImageListItemBar
+                  sx={{
+                    background:
+                      'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
+                      'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                  }}
+                  title={
+                    obj?.author?.name ? (
+                      <a
+                        target='_blank'
+                        id='author-head-title'
+                        href={obj?.author?.link ? obj.author.link : '#'}
+                      >
+                        {obj.author.name}
+                      </a>
+                    ) : (
+                      obj.description
+                    )
+                  }
+                  position='top'
+                  actionIcon={
+                    <IconButton
+                      sx={{ color: 'white' }}
+                      aria-label={`Photo by ${
+                        obj?.author?.name ? obj?.author?.name : obj.description
+                      }`}
+                    >
+                      <Link
+                        href={obj?.author?.link ? obj.author.link : '#'}
+                        color='inherit'
+                      >
+                        <PhotoCamera />
+                      </Link>
+                    </IconButton>
+                  }
+                  actionPosition='left'
+                >
+                  Text
+                </ImageListItemBar>
+              )}
               {statusAPI !== 'idle' ? (
                 <Skeleton
                   height={320}

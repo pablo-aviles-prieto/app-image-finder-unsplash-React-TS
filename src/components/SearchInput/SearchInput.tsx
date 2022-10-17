@@ -14,14 +14,6 @@ export const SearchInput: React.FC<Props> = ({
   onSubmitFormHandler,
 }) => {
   const searchInput = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
-
-  // const submitFormHandler = (e: React.FormEvent, ) => {
-  //   e.preventDefault();
-  //   const enteredSearch = searchInput.current!.value.trim();
-  //   const parsedSearch = enteredSearch.replace(/(\s)+/g, '%20');
-  //   navigate(`/search?imgs=${parsedSearch}`);
-  // };
 
   return (
     <form

@@ -49,9 +49,9 @@ export const Search: React.FC = () => {
 
   const queryCategories = useQuery().get('imgscat');
   const queryImgs = useQuery().get('imgs');
-  const colorParam = useQuery().get('color');
-  const orientationParam = useQuery().get('orientation');
-  const orderByParam = useQuery().get('ordered_by');
+  const queryColor = useQuery().get('color');
+  const queryOrientation = useQuery().get('orientation');
+  const queryOrderBy = useQuery().get('ordered_by');
 
   useEffect(() => {
     if (queryCategories) {
@@ -64,18 +64,18 @@ export const Search: React.FC = () => {
       return;
     }
     let advancedSearchParams;
-    if (colorParam || orientationParam || orderByParam) {
-      const colorString = !colorParam
+    if (queryColor || queryOrientation || queryOrderBy) {
+      const colorString = !queryColor
         ? ''
-        : colorParam == 'null'
+        : queryColor == 'null'
         ? ''
-        : `&color=${colorParam}`;
-      const orientationString = !orientationParam
+        : `&color=${queryColor}`;
+      const orientationString = !queryOrientation
         ? ''
-        : orientationParam == 'null'
+        : queryOrientation == 'null'
         ? ''
-        : `&orientation=${orientationParam}`;
-      const orderByString = orderByParam ? `&ordered_by=${orderByParam}` : '';
+        : `&orientation=${queryOrientation}`;
+      const orderByString = queryOrderBy ? `&ordered_by=${queryOrderBy}` : '';
       advancedSearchParams = colorString + orientationString + orderByString;
     }
     console.log('advancedSearchParams', advancedSearchParams);
@@ -99,9 +99,9 @@ export const Search: React.FC = () => {
     dispatch,
     queryImgs,
     queryCategories,
-    colorParam,
-    orientationParam,
-    orderByParam,
+    queryColor,
+    queryOrientation,
+    queryOrderBy,
     forceFetch,
   ]);
 
@@ -162,9 +162,50 @@ export const Search: React.FC = () => {
     ? `${styles['search-input-container']} ${styles['input-error']}`
     : styles['search-input-container'];
 
+  const titleToDisplay = () => {
+    if (queryCategories) {
+      return `Searching photos from the category: ${queryCategories.toUpperCase()}`;
+    }
+    if (queryImgs) {
+      let advancedSearchString = `Searching photos for: ${queryImgs.toUpperCase()}`;
+      const checkingForColorOrOrientation = checkingForSearchQueryParams(
+        queryColor,
+        queryOrientation
+      );
+      if (checkingForColorOrOrientation) {
+        if (queryColor && queryColor !== 'null') {
+          advancedSearchString =
+            advancedSearchString +
+            `, filtered by color: ${queryColor.toUpperCase()}`;
+        }
+        if (queryOrientation && queryOrientation !== 'null') {
+          if (queryColor && queryColor !== 'null') {
+            advancedSearchString =
+              advancedSearchString +
+              ` and by orientation: ${queryOrientation.toUpperCase()}`;
+          } else {
+            advancedSearchString =
+              advancedSearchString +
+              `, filtered by orientation: ${queryOrientation.toUpperCase()}`;
+          }
+        }
+      }
+      if (queryOrderBy === 'latest') {
+        if (checkingForColorOrOrientation) {
+          advancedSearchString =
+            advancedSearchString + `, and ordered by LATEST`;
+        } else {
+          advancedSearchString = advancedSearchString + `, ordered by LATEST`;
+        }
+      }
+      return advancedSearchString;
+    }
+    return `Searching random photos from unsplash`;
+  };
+
   return (
     <>
-      <MainContainer sectionTitle='Search for images'>
+      <MainContainer sectionTitle={titleToDisplay()}>
         <>
           <MainContainerCard>
             <>
@@ -217,11 +258,6 @@ export const Search: React.FC = () => {
               </div>
             </>
           </MainContainerCard>
-          {/* <div>
-            <br />
-            <h3 style={{ color: 'cyan' }}>Categories: {queryCategories}</h3>
-            <h3 style={{ color: 'cyan' }}>Images: {queryImgs}</h3>
-          </div> */}
         </>
       </MainContainer>
       <GridImages

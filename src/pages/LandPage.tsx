@@ -17,7 +17,6 @@ export const LandPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const queryCategories = useQuery().get('cats');
-  console.log('queryCategories', queryCategories);
 
   useEffect(() => {
     if (queryCategories) {
@@ -48,9 +47,15 @@ export const LandPage: React.FC = () => {
     navigate(`/?cats=${parsedSearch}`);
   };
 
+  console.log('queryCategories', queryCategories);
+
+  const titleToDisplay = queryCategories
+    ? `Searching the categories: ${queryCategories}`
+    : 'Browse around this unsplash categories';
+
   return (
     <>
-      <MainContainer sectionTitle='Browse around this unsplash categories'>
+      <MainContainer sectionTitle={titleToDisplay}>
         <>
           <SearchInput
             placeholderText='Search categories...'
