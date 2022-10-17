@@ -1,0 +1,105 @@
+.card-form {
+  background-color: rgba(255, 255, 255, 0.795);
+  padding: 1rem;
+  max-height: 100%;
+  border-radius: 0.8rem;
+  box-shadow: 1px 1px 8px rgb(78, 173, 252);
+}
+
+.card-form-title {
+  margin: auto;
+  width: 100%;
+  max-width: 51rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: rgb(2, 101, 182);
+}
+
+.search-input-container {
+  max-height: 2rem;
+}
+
+.search-input-container > form > input {
+  height: 100%;
+  font-size: 1rem;
+}
+
+.input-error > form > input {
+  border-color: rgb(192, 5, 5);
+}
+
+.search-input-container > form > input:focus-visible {
+  border: 2px solid rgb(2, 101, 182);
+}
+
+.input-error > form > input:focus-visible {
+  border-color: rgb(128, 3, 3);
+}
+
+.search-input-container > form > button {
+  height: 1.45rem;
+}
+
+.input-error > form > button {
+  border-color: rgb(192, 5, 5);
+  background-color: rgb(192, 5, 5);
+}
+
+.input-error > form > button:hover {
+  background-color: rgb(192, 5, 5);
+}
+
+.form-container {
+  max-width: calc(51rem + 10%);
+  width: 90%;
+  margin: 0.5rem auto;
+  border: 1px solid rgba(2, 101, 182, 0.253);
+  padding: 0 5% 0.4rem 5%;
+  border-radius: 0.7rem;
+}
+
+.grid-input-form {
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+.form-container > legend {
+  text-align: left;
+}
+
+@media (min-width: 680px) {
+  .card-form-title {
+    width: 80%;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  .search-input-container {
+    max-height: auto;
+  }
+  .search-input-container > form > input {
+    height: 2.5rem;
+    font-size: 1.3rem;
+  }
+  .search-input-container > form > input:focus-visible {
+    border: 3px solid rgb(2, 101, 182);
+  }
+  .input-error > form > input:focus-visible {
+    border-color: rgb(128, 3, 3);
+  }
+  .search-input-container > form > button {
+    height: auto;
+  }
+  .form-container {
+    margin: 2rem auto;
+    border: 1px solid rgba(2, 101, 182, 0.253);
+    padding: 1rem 5% 2rem 5%;
+  }
+  .grid-input-form {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 0.5rem;
+  }
+}

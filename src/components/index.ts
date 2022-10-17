@@ -6,3 +6,6 @@ export { GridImages } from './GridImages/GridImages';
 export { SearchInput } from './SearchInput/SearchInput';
 export { MainContainer } from './MainContainer/MainContainer';
 export { MainContainerCard } from './MainContainer/MainContainerCard';
+export { Checkboxes } from './SearchFields/Checkboxes';
+export { SelectAutoComplete } from './SearchFields/SelectAutoComplete';
+export { SwitchBtn } from './SearchFields/SwitchBtn';
