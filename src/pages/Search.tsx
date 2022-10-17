@@ -207,59 +207,55 @@ export const Search: React.FC = () => {
   return (
     <>
       <MainContainer sectionTitle={titleToDisplay()}>
-        <>
-          <MainContainerCard>
-            <>
-              <div className={styles['card-form']}>
-                <div className={styles['card-form-title']}>
-                  {!inputError ? (
-                    <p>
-                      Search for images, you can narrow'em down applying filters
-                    </p>
-                  ) : (
-                    <p style={{ color: 'rgb(192, 5, 5)' }}>
-                      Can't use the filters without typing any word!
-                    </p>
-                  )}
-                </div>
-                <div className={divSearchContainerStyles}>
-                  <SearchInput
-                    placeholderText='Search images...'
-                    onSubmitFormHandler={submitFormHandler}
-                  />
-                </div>
-                <fieldset className={styles['form-container']}>
-                  <legend>Advanced search</legend>
-                  <div>
-                    <SwitchBtn
-                      onChangeHandler={orderSwitchHandler}
-                      switchState={orderBySwitch}
-                      textCases={orderByData}
-                    />
-                  </div>
-                  <div className={styles['grid-input-form']}>
-                    <SelectAutoComplete
-                      onChangeHandler={colorInputHandler}
-                      dataArray={colorsInput}
-                      textsField={{
-                        labelText: 'Filter by color',
-                        placeholderText: 'colors...',
-                      }}
-                    />
-                    <SelectAutoComplete
-                      onChangeHandler={orientationInputHandler}
-                      dataArray={orientationInputData}
-                      textsField={{
-                        labelText: 'Filter by orientation',
-                        placeholderText: 'types...',
-                      }}
-                    />
-                  </div>
-                </fieldset>
+        <MainContainerCard>
+          <div className={styles['card-form']}>
+            <div className={styles['card-form-title']}>
+              {!inputError ? (
+                <p>
+                  Search for images, you can narrow'em down applying filters
+                </p>
+              ) : (
+                <p style={{ color: 'rgb(192, 5, 5)' }}>
+                  Can't use the filters without typing any word!
+                </p>
+              )}
+            </div>
+            <div className={divSearchContainerStyles}>
+              <SearchInput
+                placeholderText='Search images...'
+                onSubmitFormHandler={submitFormHandler}
+              />
+            </div>
+            <fieldset className={styles['form-container']}>
+              <legend>Advanced search</legend>
+              <div>
+                <SwitchBtn
+                  onChangeHandler={orderSwitchHandler}
+                  switchState={orderBySwitch}
+                  textCases={orderByData}
+                />
               </div>
-            </>
-          </MainContainerCard>
-        </>
+              <div className={styles['grid-input-form']}>
+                <SelectAutoComplete
+                  onChangeHandler={colorInputHandler}
+                  dataArray={colorsInput}
+                  textsField={{
+                    labelText: 'Filter by color',
+                    placeholderText: 'colors...',
+                  }}
+                />
+                <SelectAutoComplete
+                  onChangeHandler={orientationInputHandler}
+                  dataArray={orientationInputData}
+                  textsField={{
+                    labelText: 'Filter by orientation',
+                    placeholderText: 'types...',
+                  }}
+                />
+              </div>
+            </fieldset>
+          </div>
+        </MainContainerCard>
       </MainContainer>
       <GridImages
         forceBarDisplaying={false}
