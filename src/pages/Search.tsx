@@ -48,6 +48,7 @@ export const Search: React.FC = () => {
   };
 
   const queryCategories = useQuery().get('imgscat');
+  const queryCategoryName = useQuery().get('catname');
   const queryImgs = useQuery().get('imgs');
   const queryColor = useQuery().get('color');
   const queryOrientation = useQuery().get('orientation');
@@ -163,8 +164,8 @@ export const Search: React.FC = () => {
     : styles['search-input-container'];
 
   const titleToDisplay = () => {
-    if (queryCategories) {
-      return `Searching photos from the category: ${queryCategories.toUpperCase()}`;
+    if (queryCategoryName) {
+      return `Searching photos from the category: ${queryCategoryName.toUpperCase()}`;
     }
     if (queryImgs) {
       let advancedSearchString = `Searching photos for: ${queryImgs.toUpperCase()}`;

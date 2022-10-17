@@ -18,7 +18,7 @@ export const MainContainer: React.FC<Props> = ({ children, sectionTitle }) => {
         {children}
       </div>
       <div className={styles['div-shadow']}></div>
-      <div className={styles['grid-container-title']}>
+      <div id='container-imgs-title' className={styles['grid-container-title']}>
         <h2>{sectionTitle}</h2>
       </div>
     </>

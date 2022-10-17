@@ -31,7 +31,7 @@ export const GridImages: React.FC<GridImagesProps> = ({
   const dispatch = useAppDispatch();
   console.log('photosList', photosList);
 
-  const loaderArray: CategoryPhotoObj[] = [...Array(10)].map((_, index) => ({
+  const loaderArray: CategoryPhotoObj[] = [...Array(30)].map((_, index) => ({
     paginationInfo: { totalCount: 0, totalPages: 0 },
     id: `${index}`,
     description: '',
@@ -46,7 +46,6 @@ export const GridImages: React.FC<GridImagesProps> = ({
     link: '',
   }));
   const data = statusAPI === 'idle' ? photosList.parsedArray : loaderArray;
-  console.log('data', data);
 
   return (
     <>
@@ -176,6 +175,7 @@ export const GridImages: React.FC<GridImagesProps> = ({
               count={photosList.totalPages}
               color='primary'
               size='large'
+              // page={}
               siblingCount={2}
               onChange={(e, page) => {
                 const parsedLink = replacingPageNumberInLink(
@@ -193,6 +193,9 @@ export const GridImages: React.FC<GridImagesProps> = ({
                         updateTotalPages: false,
                       })
                     );
+                document
+                  .getElementById('container-imgs-title')
+                  ?.scrollIntoView();
               }}
             />
           </Stack>
