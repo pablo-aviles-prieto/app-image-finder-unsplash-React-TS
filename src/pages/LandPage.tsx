@@ -12,7 +12,6 @@ import {
 } from '../components';
 
 export const LandPage: React.FC = () => {
-  // const status = useAppSelector((state) => state.search.status);
   const photos = useAppSelector((state) => state.search.unsplashData);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -37,8 +36,9 @@ export const LandPage: React.FC = () => {
   }, [dispatch, queryCategories]);
 
   const clickImgHandler = (id: string) => {
-    const image = photos.parsedArray.filter((obj) => obj.id === id);
-    navigate(`/search?imgscat=${id}&catname=${image[0].description}`);
+    const image = photos.parsedArray.find((obj) => obj.id === id);
+    console.log('image', image);
+    navigate(`/search?imgscat=${id}&catname=${image?.description}`);
   };
 
   const submitFormHandler = (e: React.FormEvent, inputValue: string) => {
@@ -47,8 +47,6 @@ export const LandPage: React.FC = () => {
     const parsedSearch = enteredSearch.replace(/(\s)+/g, '%20');
     navigate(`/?cats=${parsedSearch}`);
   };
-
-  console.log('queryCategories', queryCategories);
 
   const titleToDisplay = queryCategories
     ? `Searching the categories: ${queryCategories}`

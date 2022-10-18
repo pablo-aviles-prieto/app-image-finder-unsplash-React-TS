@@ -1,7 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { fetchPhotos, fetchCategories } from '../components/store/searchSlice';
+import {
+  fetchPhotos,
+  fetchCategories,
+  CategoryPhotoObj,
+} from '../components/store/searchSlice';
+import { addImgToFavReducer } from '../components/store/favouriteSlice';
 import { useQuery, checkingForSearchQueryParams } from '../utils';
 import {
   MainContainer,
@@ -10,7 +15,11 @@ import {
   SearchInput,
   SelectAutoComplete,
   SwitchBtn,
+  ModalBackdrop,
 } from '../components';
+import { Favorite, PhotoCamera, ThumbUp } from '@mui/icons-material';
+import { HeightIcon, WidthIcon } from '../components/Icons';
+import { TextField } from '@mui/material';
 
 import styles from './Search.module.css';
 
@@ -30,17 +39,44 @@ const colorsInput = [
 
 const orientationInputData = ['landscape', 'portrait', 'squarish'];
 
+type ModalData = {
+  data: CategoryPhotoObj;
+  url: string;
+  state: boolean;
+};
+
+const initState = {
+  data: {
+    id: ``,
+    description: '',
+    width: '',
+    height: '',
+    totalPhotos: 0,
+    likes: 0,
+    urls: { full: '', small: '', thumb: '' },
+    tags: [{ title: '' }],
+    author: { name: '', link: '' },
+    imgCat: '',
+    link: '',
+  },
+  url: '',
+  state: false,
+};
+
 export const Search: React.FC = () => {
   const [colorInput, setColorInput] = useState<string | string[]>(['']);
   const [forceFetch, setForceFetch] = useState(false);
   const [inputError, setInputError] = useState(false);
+  const [modalState, setModalState] = useState<ModalData>(initState);
   const [orientationInput, setOrientationInput] = useState<string | string[]>([
     '',
   ]);
   const [orderBySwitch, setOrderBySwitch] = useState(true);
-  // const searchInput = useRef<HTMLInputElement>(null);
+  const descriptionInput = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const photoList = useAppSelector((state) => state.search.unsplashData);
+  const favedImgs = useAppSelector((state) => state.favourite.favedImages);
 
   const orderByData = {
     trueString: 'relevant',
@@ -106,8 +142,11 @@ export const Search: React.FC = () => {
     forceFetch,
   ]);
 
-  const clickImgHandler = (id: string) => {
-    console.log('id', id);
+  const clickImgHandler = (id: string, url: string) => {
+    const photoObjToFav = photoList.parsedArray.filter(
+      (photoObj) => photoObj.id === id
+    );
+    setModalState({ data: photoObjToFav[0], url: url, state: true });
   };
 
   const submitFormHandler = (e: React.FormEvent, inputValue: string) => {
@@ -141,6 +180,18 @@ export const Search: React.FC = () => {
     navigate(newUrl);
   };
 
+  const submitModalFormHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+    const enteredDescription = descriptionInput.current!.value;
+    if (enteredDescription.trim()) {
+      const newObj = { ...modalState.data };
+      newObj.description = enteredDescription;
+      dispatch(addImgToFavReducer(newObj));
+    } else {
+      dispatch(addImgToFavReducer(modalState.data));
+    }
+  };
+
   const colorInputHandler = (
     e: React.SyntheticEvent,
     value: string | string[]
@@ -157,6 +208,10 @@ export const Search: React.FC = () => {
 
   const orderSwitchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOrderBySwitch(e.target.checked);
+  };
+
+  const switchModalState = () => {
+    setModalState((prevState) => ({ ...prevState, state: !prevState.state }));
   };
 
   const divSearchContainerStyles = inputError
@@ -203,6 +258,8 @@ export const Search: React.FC = () => {
     }
     return `Searching random photos from unsplash`;
   };
+
+  console.log('modalState', modalState);
 
   return (
     <>
@@ -261,6 +318,85 @@ export const Search: React.FC = () => {
         forceBarDisplaying={false}
         onClickImgHandler={clickImgHandler}
       />
+      <ModalBackdrop
+        handlingModal={switchModalState}
+        modalState={modalState.state}
+      >
+        <div className={styles['modal-container']}>
+          <div className={styles['modal-container-flex']}>
+            <div className={styles['modal-container-img']}>
+              <img
+                className={
+                  modalState!.data!.width > modalState!.data!.height
+                    ? styles['img-is-wider']
+                    : ''
+                }
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '69vh',
+                  borderRadius: '15px',
+                }}
+                src={modalState.url}
+              />
+            </div>
+            <div>
+              <fieldset className={styles['description-container']}>
+                <legend>Description</legend>
+                <p>
+                  <b>{modalState.data.description}</b>
+                </p>
+                <form
+                  onSubmit={submitModalFormHandler}
+                  className={styles['description-form']}
+                >
+                  <TextField
+                    className={styles['description-input']}
+                    id='input'
+                    label='Add description'
+                    variant='standard'
+                    color='primary'
+                    size='small'
+                    inputRef={descriptionInput}
+                  />
+                  <button
+                    type='submit'
+                    className={styles['description-like-btn']}
+                  >
+                    <Favorite fontSize='large' />
+                  </button>
+                </form>
+              </fieldset>
+              <fieldset className={styles['info-container']}>
+                <legend>Details</legend>
+                <ul className={styles['details-list']}>
+                  <li>
+                    <PhotoCamera />{' '}
+                    <a
+                      href={
+                        modalState.data.author.link
+                          ? modalState.data.author.link
+                          : '#'
+                      }
+                      target='_blank'
+                    >
+                      @{modalState.data.author.name}
+                    </a>
+                  </li>
+                  <li>
+                    <ThumbUp /> {modalState.data.likes}
+                  </li>
+                  <li>
+                    <WidthIcon /> {modalState.data.width} px
+                  </li>
+                  <li>
+                    <HeightIcon /> {modalState.data.height} px
+                  </li>
+                </ul>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </ModalBackdrop>
     </>
   );
 };

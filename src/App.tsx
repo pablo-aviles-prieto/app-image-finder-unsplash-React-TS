@@ -1,10 +1,19 @@
+import { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { NotFound, MainNavigation } from './components';
+import { MainNavigation } from './components';
 import { LandPage, Search, Favourites } from './pages';
+import { useAppDispatch } from './app/hooks';
+import { fetchingLocalStorage } from './components/store/favouriteSlice';
 
 import './index.css';
 
 const App: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchingLocalStorage());
+  }, []);
+
   return (
     <div>
       <MainNavigation>

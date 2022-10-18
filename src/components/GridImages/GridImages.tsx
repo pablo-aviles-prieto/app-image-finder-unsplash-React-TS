@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Skeleton,
   ImageList,
@@ -8,7 +9,7 @@ import {
   Stack,
   Link,
 } from '@mui/material';
-import { RemoveRedEye, Favorite, PhotoCamera } from '@mui/icons-material';
+import { RemoveRedEye, Favorite, PhotoCamera, Hd } from '@mui/icons-material';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { CategoryPhotoObj, fetchPhotos } from '../store/searchSlice';
 import { fetchCategories } from '../../components/store/searchSlice';
@@ -18,7 +19,7 @@ import styles from './GridImages.module.css';
 
 type GridImagesProps = {
   forceBarDisplaying: boolean;
-  onClickImgHandler: (id: string) => void;
+  onClickImgHandler: (id: string, url: string) => void;
 };
 
 export const GridImages: React.FC<GridImagesProps> = ({
@@ -127,7 +128,7 @@ export const GridImages: React.FC<GridImagesProps> = ({
                   src={obj?.imgCat ? obj.imgCat : obj.urls.small}
                   alt={obj.description}
                   loading='lazy'
-                  onClick={() => onClickImgHandler(obj.id)}
+                  onClick={() => onClickImgHandler(obj.id, obj?.urls?.small)}
                 />
               )}
               <ImageListItemBar
@@ -143,7 +144,9 @@ export const GridImages: React.FC<GridImagesProps> = ({
                   <>
                     {!forceBarDisplaying && (
                       <IconButton
-                        onClick={() => console.log('check')}
+                        onClick={() =>
+                          onClickImgHandler(obj.id, obj?.urls?.small)
+                        }
                         sx={{
                           color: 'rgba(255, 255, 255, 0.54)',
                           padding: '4px',
@@ -154,14 +157,14 @@ export const GridImages: React.FC<GridImagesProps> = ({
                       </IconButton>
                     )}
                     <IconButton
-                      onClick={() => onClickImgHandler(obj.id)}
+                      onClick={() => onClickImgHandler(obj.id, obj?.urls?.full)}
                       sx={{
                         color: 'rgba(255, 255, 255, 0.54)',
                         padding: '4px',
                       }}
                       aria-label={`${obj.description}`}
                     >
-                      <RemoveRedEye />
+                      {forceBarDisplaying ? <RemoveRedEye /> : <Hd />}
                     </IconButton>
                   </>
                 }

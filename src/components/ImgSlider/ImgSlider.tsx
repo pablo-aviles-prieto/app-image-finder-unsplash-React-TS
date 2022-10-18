@@ -1,44 +1,22 @@
 import Slider from 'react-slick';
 import Skeleton from '@mui/material/Skeleton';
 import { ImgCard } from './ImgCard';
+import { useAppSelector } from '../../app/hooks';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styles from './ImgSlider.module.css';
 
 type loaderArrayType = {
+  id: string;
   url: string;
   img: string;
   title: string;
 }[];
 
-const imgPlaceholder: { img: string; title: string; url: string }[] = [
-  {
-    img: `${process.env.PUBLIC_URL}bground.jpg`,
-    title: 'Random image',
-    url: '',
-  },
-  {
-    img: `${process.env.PUBLIC_URL}bground1.jpg`,
-    title: 'Random image1',
-    url: '',
-  },
-  {
-    img: `${process.env.PUBLIC_URL}bground2.jpg`,
-    title: 'Random image2',
-    url: '',
-  },
-  {
-    img: `${process.env.PUBLIC_URL}bground3.jpg`,
-    title: 'Random image3',
-    url: '',
-  },
-  {
-    img: `${process.env.PUBLIC_URL}bground4.jpg`,
-    title: 'Random image4',
-    url: '',
-  },
-];
+type Props = {
+  dataArrayToPrint: any[];
+};
 
 const sliderSettings = {
   dots: true,
@@ -61,30 +39,34 @@ const sliderSettings = {
   ],
 };
 
-export const ImgSlider: React.FC = () => {
-  const isLoading = false;
+const loaderArray: loaderArrayType = [...Array(5)].map((_, index) => ({
+  id: `${index}`,
+  url: `${index}`,
+  img: '',
+  title: '',
+}));
 
-  const loaderArray: loaderArrayType = [...Array(5)].map((_, index) => ({
-    url: `${index}`,
-    img: '',
-    title: '',
-  }));
-
-  const data = isLoading ? loaderArray : imgPlaceholder;
+export const ImgSlider: React.FC<Props> = ({ dataArrayToPrint }) => {
+  const statusAPI = useAppSelector((state) => state.search.status);
+  const data = statusAPI === 'idle' ? dataArrayToPrint : loaderArray;
 
   return (
     <Slider className={styles.slider} {...sliderSettings}>
       {data.map((item) =>
-        isLoading ? (
+        statusAPI !== 'idle' ? (
           <Skeleton
             animation='wave'
             className={styles['placeholder-card']}
-            key={item.url}
+            key={item.id}
             variant='rectangular'
             height={230}
           />
         ) : (
-          <ImgCard key={item.img} img={item.img} title={item.title} />
+          <ImgCard
+            key={item.id}
+            img={item.urls.small}
+            title={item.description}
+          />
         )
       )}
     </Slider>

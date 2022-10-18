@@ -1,17 +1,19 @@
 import { ImageSearch, Favorite, Image, ArrowRight } from '@mui/icons-material';
-import { ImgSlider, MainContainer, MainContainerCard } from '../';
+import { ImgSlider } from '../';
+import { useAppSelector } from '../../app/hooks';
 
 import styles from './FavedImgsContainer.module.css';
 
 export const FavedImgsContainer: React.FC = () => {
-  const hasFavImgs = true;
+  const favedImgs = useAppSelector((state) => state.favourite.favedImages);
+  const hasFavImgs = favedImgs.length > 0 ? true : false;
 
   return (
     <>
       {hasFavImgs ? (
         <>
           <p className={styles['faved-title']}>Your fav'ed images</p>
-          <ImgSlider />
+          <ImgSlider dataArrayToPrint={favedImgs} />
         </>
       ) : (
         <div className={styles['no-faved-imgs']}>

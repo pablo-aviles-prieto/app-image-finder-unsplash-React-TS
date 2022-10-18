@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import searchReducer from '../components/store/searchSlice'
+import searchReducer from '../components/store/searchSlice';
+import favouriteReducers from '../components/store/favouriteSlice';
 
 export const store = configureStore({
   reducer: {
     search: searchReducer,
+    favourite: favouriteReducers,
   },
 });
 
