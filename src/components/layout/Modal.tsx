@@ -3,6 +3,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
+import { useAppSelector } from '../../app/hooks';
 
 import styles from './Modal.module.css';
 
@@ -15,15 +16,19 @@ const style = {
 
 type Props = {
   children: JSX.Element;
-  modalState: boolean;
+  // modalState: boolean;
   handlingModal: () => void;
 };
 
 export const ModalBackdrop: React.FC<Props> = ({
-  modalState,
+  // modalState,
   handlingModal,
   children,
 }) => {
+  const modalState = useAppSelector((state) => state.modal.modalState);
+  console.log('modalState', modalState);
+  
+
   return (
     <div>
       <Modal

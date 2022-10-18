@@ -179,7 +179,7 @@ export const GridImages: React.FC<GridImagesProps> = ({
               color='primary'
               size='large'
               // page={}
-              siblingCount={2}
+              siblingCount={1}
               onChange={(e, page) => {
                 const parsedLink = replacingPageNumberInLink(
                   endpointCalled,

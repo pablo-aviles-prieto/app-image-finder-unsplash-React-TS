@@ -6,7 +6,17 @@ import {
   fetchCategories,
   CategoryPhotoObj,
 } from '../components/store/searchSlice';
-import { addImgToFavReducer } from '../components/store/favouriteSlice';
+import {
+  addImgToFavReducer,
+  deleteFavedImgReducer,
+  updateImgDescription,
+} from '../components/store/favouriteSlice';
+import {
+  addPhotoModalReducer,
+  switchModalStateReducer,
+  setTrueDescriptionReducer,
+  setFalseDescriptionReducer,
+} from '../components/store/modalSlice';
 import { useQuery, checkingForSearchQueryParams } from '../utils';
 import {
   MainContainer,
@@ -16,10 +26,8 @@ import {
   SelectAutoComplete,
   SwitchBtn,
   ModalBackdrop,
+  ImageInfoModal,
 } from '../components';
-import { Favorite, PhotoCamera, ThumbUp } from '@mui/icons-material';
-import { HeightIcon, WidthIcon } from '../components/Icons';
-import { TextField } from '@mui/material';
 
 import styles from './Search.module.css';
 
@@ -67,16 +75,17 @@ export const Search: React.FC = () => {
   const [colorInput, setColorInput] = useState<string | string[]>(['']);
   const [forceFetch, setForceFetch] = useState(false);
   const [inputError, setInputError] = useState(false);
-  const [modalState, setModalState] = useState<ModalData>(initState);
+  // const [modalState, setModalState] = useState<ModalData>(initState);
   const [orientationInput, setOrientationInput] = useState<string | string[]>([
     '',
   ]);
   const [orderBySwitch, setOrderBySwitch] = useState(true);
-  const descriptionInput = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const photoList = useAppSelector((state) => state.search.unsplashData);
   const favedImgs = useAppSelector((state) => state.favourite.favedImages);
+  const imgDisplayedModal = useAppSelector((state) => state.modal.imgToDisplay);
+  // const tags = useAppSelector((state) => state.favourite.tags);
 
   const orderByData = {
     trueString: 'relevant',
@@ -142,11 +151,34 @@ export const Search: React.FC = () => {
     forceFetch,
   ]);
 
+  const switchModalState = () => {
+    dispatch(switchModalStateReducer());
+  };
+
   const clickImgHandler = (id: string, url: string) => {
-    const photoObjToFav = photoList.parsedArray.filter(
+    const checkDuplicity = favedImgs.find((obj) => obj.id === id);
+    if (checkDuplicity) {
+      dispatch(setFalseDescriptionReducer());
+      dispatch(
+        addPhotoModalReducer({
+          imgToDisplay: checkDuplicity,
+          url: url,
+          state: true,
+        })
+      );
+      return;
+    }
+    const photoObjToFav = photoList.parsedArray.find(
       (photoObj) => photoObj.id === id
     );
-    setModalState({ data: photoObjToFav[0], url: url, state: true });
+    dispatch(setFalseDescriptionReducer());
+    dispatch(
+      addPhotoModalReducer({
+        imgToDisplay: photoObjToFav,
+        url: url,
+        state: true,
+      })
+    );
   };
 
   const submitFormHandler = (e: React.FormEvent, inputValue: string) => {
@@ -172,7 +204,7 @@ export const Search: React.FC = () => {
       ? orderByData.trueString
       : orderByData.falseString;
     const newUrl = `/search?imgs=${parsedSearch}&color=${colorInput}&orientation=${orientationInput}&ordered_by=${orederedBy}`;
-    console.log('newUrl', newUrl);
+
     !checkingForSearchQueryParams(
       checkingForColorParam,
       checkingForOrientationParam
@@ -180,15 +212,41 @@ export const Search: React.FC = () => {
     navigate(newUrl);
   };
 
-  const submitModalFormHandler = (e: React.FormEvent) => {
+  const submitModalFormHandler = (e: React.FormEvent, inputValue: string) => {
     e.preventDefault();
-    const enteredDescription = descriptionInput.current!.value;
+    const checkDuplicity = favedImgs.find(
+      (obj) => obj.id === imgDisplayedModal.id
+    );
+    const checkNewDescription =
+      checkDuplicity?.description === inputValue ? false : true;
+    if (checkDuplicity) {
+      alert('Photo already saved in favs!');
+      switchModalState();
+      return;
+    }
+
+    const enteredDescription = inputValue;
     if (enteredDescription.trim()) {
-      const newObj = { ...modalState.data };
+      const newObj = { ...imgDisplayedModal };
       newObj.description = enteredDescription;
+      alert('Image with description saved to my photos!');
       dispatch(addImgToFavReducer(newObj));
+      switchModalState();
     } else {
-      dispatch(addImgToFavReducer(modalState.data));
+      alert('Image saved to my photos!');
+      dispatch(addImgToFavReducer(imgDisplayedModal));
+      switchModalState();
+    }
+  };
+
+  const deletingPhotoFromSaved = (id: string) => {
+    const checkDuplicity = favedImgs.find(
+      (obj) => obj.id === imgDisplayedModal.id
+    );
+    if (checkDuplicity) {
+      dispatch(deleteFavedImgReducer(id));
+    } else {
+      return;
     }
   };
 
@@ -209,14 +267,6 @@ export const Search: React.FC = () => {
   const orderSwitchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOrderBySwitch(e.target.checked);
   };
-
-  const switchModalState = () => {
-    setModalState((prevState) => ({ ...prevState, state: !prevState.state }));
-  };
-
-  const divSearchContainerStyles = inputError
-    ? `${styles['search-input-container']} ${styles['input-error']}`
-    : styles['search-input-container'];
 
   const titleToDisplay = () => {
     if (queryCategoryName) {
@@ -259,7 +309,9 @@ export const Search: React.FC = () => {
     return `Searching random photos from unsplash`;
   };
 
-  console.log('modalState', modalState);
+  const divSearchContainerStyles = inputError
+    ? `${styles['search-input-container']} ${styles['input-error']}`
+    : styles['search-input-container'];
 
   return (
     <>
@@ -320,82 +372,14 @@ export const Search: React.FC = () => {
       />
       <ModalBackdrop
         handlingModal={switchModalState}
-        modalState={modalState.state}
+        // modalState={modalState.state}
       >
-        <div className={styles['modal-container']}>
-          <div className={styles['modal-container-flex']}>
-            <div className={styles['modal-container-img']}>
-              <img
-                className={
-                  modalState!.data!.width > modalState!.data!.height
-                    ? styles['img-is-wider']
-                    : ''
-                }
-                style={{
-                  maxWidth: '100%',
-                  maxHeight: '69vh',
-                  borderRadius: '15px',
-                }}
-                src={modalState.url}
-              />
-            </div>
-            <div>
-              <fieldset className={styles['description-container']}>
-                <legend>Description</legend>
-                <p>
-                  <b>{modalState.data.description}</b>
-                </p>
-                <form
-                  onSubmit={submitModalFormHandler}
-                  className={styles['description-form']}
-                >
-                  <TextField
-                    className={styles['description-input']}
-                    id='input'
-                    label='Add description'
-                    variant='standard'
-                    color='primary'
-                    size='small'
-                    inputRef={descriptionInput}
-                  />
-                  <button
-                    type='submit'
-                    className={styles['description-like-btn']}
-                  >
-                    <Favorite fontSize='large' />
-                  </button>
-                </form>
-              </fieldset>
-              <fieldset className={styles['info-container']}>
-                <legend>Details</legend>
-                <ul className={styles['details-list']}>
-                  <li>
-                    <PhotoCamera />{' '}
-                    <a
-                      href={
-                        modalState.data.author.link
-                          ? modalState.data.author.link
-                          : '#'
-                      }
-                      target='_blank'
-                    >
-                      @{modalState.data.author.name}
-                    </a>
-                  </li>
-                  <li>
-                    <ThumbUp /> {modalState.data.likes}
-                  </li>
-                  <li>
-                    <WidthIcon /> {modalState.data.width} px
-                  </li>
-                  <li>
-                    <HeightIcon /> {modalState.data.height} px
-                  </li>
-                </ul>
-              </fieldset>
-            </div>
-          </div>
-        </div>
+        <ImageInfoModal
+          // data={modalState.data}
+          // url={modalState.url}
+          onSubmitFormHandler={submitModalFormHandler}
+          onDeleteFavBtn={deletingPhotoFromSaved}
+        />
       </ModalBackdrop>
     </>
   );

@@ -1,0 +1,112 @@
+.modal-container-img {
+  text-align: center;
+}
+
+.info-container,
+.description-container {
+  margin-top: 0.5rem;
+  border: 0;
+  border-top: 2px solid rgba(2, 101, 182, 0.253);
+}
+
+.details-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+  text-align: left;
+}
+
+.info-container legend,
+.description-container {
+  text-align: center;
+}
+
+.info-container {
+  margin-top: 1rem;
+}
+
+.description-container legend,
+.info-container legend {
+  margin-bottom: 0.5rem;
+}
+
+.info-container p {
+  min-width: 70%;
+  margin: auto;
+}
+
+.details-list li {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+  gap: 1rem;
+}
+
+.details-list a {
+  color: inherit;
+}
+
+.description-form {
+  margin: auto;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.3rem;
+  max-width: 18rem;
+}
+
+.description-input {
+  width: 100%;
+}
+
+.description-like-btn {
+  cursor: pointer;
+  border: 0;
+  background-color: transparent;
+}
+.description-like-btn:hover {
+  color: red;
+}
+
+.img-is-wider {
+  min-width: 0;
+}
+
+.btn-delete-container {
+  margin-top: 1rem;
+}
+
+@media (min-width: 500px) {
+  .details-list li {
+    margin-left: 0;
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 575px) {
+  .img-is-wider {
+    min-width: 40vh;
+  }
+}
+
+@media (min-width: 680px) {
+  .img-is-wider {
+    min-width: 50vh;
+  }
+}
+
+@media (min-width: 800px) {
+  .details-list {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .details-list li {
+    margin-left: 0;
+    gap: 0.5rem;
+  }
+}
+
+@media (min-width: 1050px) {
+  .img-is-wider {
+    min-width: 80vh;
+  }
+}

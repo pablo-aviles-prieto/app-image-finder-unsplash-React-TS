@@ -99,6 +99,9 @@ export const fetchPhotos = createAsyncThunk(
           small: filteredObj.urls.small,
           thumb: filteredObj.urls.thumb,
         },
+        tags: filteredObj?.tags
+          ? filteredObj.tags.map((tag: { title: string }) => tag.title)
+          : null,
         author: {
           name: filteredObj.user.name,
           link: filteredObj.user.links.html,

@@ -1,5 +1,6 @@
 export { MainNavigation } from './layout/MainNavigation';
 export { ModalBackdrop } from './layout/Modal';
+export { ImageInfoModal } from './layout/ImageInfoModal';
 export { FavedImgsContainer } from './FavedImgsContainer/FavedImgsContainer';
 export { ImgSlider } from './ImgSlider/ImgSlider';
 export { GridImages } from './GridImages/GridImages';

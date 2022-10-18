@@ -4,16 +4,35 @@ import { searchPhotosAPI, searchCategoriesAPI } from './searchPhotosAPI';
 
 interface FavState {
   favedImages: any[];
+  tags: any[];
+}
+
+export interface PhotoObj {
+  id: string;
+  description: string | undefined;
+  width: string;
+  height: string;
+  likes: number;
+  urls: {
+    full: string;
+    small: string;
+    thumb: string;
+  };
+  tags: string[];
+  author: {
+    name: string | null;
+    link: string | null;
+  };
 }
 
 const initialState: FavState = {
   favedImages: [],
+  tags: [],
 };
 
-export const favouriteslice = createSlice({
+export const favouriteSlice = createSlice({
   name: 'favourite',
   initialState,
-  // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     fetchingLocalStorage: (state) => {
       const savedImages = localStorage.getItem('fav-images');
@@ -21,39 +40,58 @@ export const favouriteslice = createSlice({
         state.favedImages = [];
         return;
       }
-      state.favedImages = JSON.parse(savedImages);
+      const parsedImages: PhotoObj[] = JSON.parse(savedImages);
+      const favedTags = [...state.tags];
+      parsedImages.forEach((imgObj) => {
+        imgObj.tags &&
+          imgObj.tags.forEach((tag) => {
+            const checker = favedTags.includes(tag);
+            if (!checker) favedTags.push(tag);
+          });
+      });
+      state.tags = favedTags;
+      state.favedImages = parsedImages;
     },
     addImgToFavReducer: (state, action) => {
-      const checkDuplicity = state.favedImages.find((obj) => {
-        return obj.id === action.payload.id;
-      });
-      if (checkDuplicity) return;
       localStorage.setItem(
         'fav-images',
         JSON.stringify([...state.favedImages, action.payload])
-        );
-        state.favedImages = [...state.favedImages, action.payload];
+      );
+
+      const favedTags = [...state.tags];
+      action.payload.tags &&
+        action.payload.tags.forEach((tag: any[]) => {
+          const checker = favedTags.includes(tag);
+          if (!checker) favedTags.push(tag);
+        });
+      state.tags = favedTags;
+      state.favedImages = [...state.favedImages, action.payload];
+    },
+    deleteFavedImgReducer: (state, action) => {
+      const newArr = state.favedImages.filter(
+        (img) => img.id !== action.payload
+      );
+      localStorage.setItem('fav-images', JSON.stringify(newArr));
+      state.favedImages = newArr;
+    },
+    updateImgDescription: (state, action) => {
+      const favedArray = [...state.favedImages];
+      console.log('favedArray1', favedArray);
+      const indexTarget = favedArray.findIndex(
+        (obj) => obj.id === action.payload.id
+      );
+      favedArray[indexTarget].description = action.payload.description;
+      localStorage.setItem('fav-images', JSON.stringify(favedArray));
+      state.favedImages = favedArray;
     },
   },
 });
 
-export const { addImgToFavReducer, fetchingLocalStorage } =
-  favouriteslice.actions;
+export const {
+  addImgToFavReducer,
+  fetchingLocalStorage,
+  deleteFavedImgReducer,
+  updateImgDescription,
+} = favouriteSlice.actions;
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-// export const selectCount = (state: RootState) => state.counter.value;
-
-// We can also write thunks by hand, which may contain both sync and async logic.
-// Here's an example of conditionally dispatching actions based on current state.
-// export const incrementIfOdd =
-//   (amount: number): AppThunk =>
-//   (dispatch, getState) => {
-//     const currentValue = selectCount(getState());
-//     if (currentValue % 2 === 1) {
-//       dispatch(incrementByAmount(amount));
-//     }
-//   };
-
-export default favouriteslice.reducer;
+export default favouriteSlice.reducer;
