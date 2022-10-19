@@ -1,0 +1,4 @@
+.category-tags-container {
+  flex-wrap: wrap;
+  gap: 6px;
+}

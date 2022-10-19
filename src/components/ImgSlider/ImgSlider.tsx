@@ -118,8 +118,8 @@ export const ImgSlider: React.FC<Props> = ({ dataArrayToPrint }) => {
       (obj) => obj.id === imgDisplayedModal.id
     );
     const checkNewDescription =
-      checkDuplicity.description === inputValue ? false : true;
-    if (checkDuplicity && !checkNewDescription) {
+      checkDuplicity?.description === inputValue ? false : true;
+    if (checkDuplicity && (!inputValue.trim() || !checkNewDescription)) {
       alert('Photo already saved in favs!');
       switchModalState();
       return;
@@ -188,11 +188,8 @@ export const ImgSlider: React.FC<Props> = ({ dataArrayToPrint }) => {
       </Slider>
       <ModalBackdrop
         handlingModal={switchModalState}
-        // modalState={modalState.state}
       >
         <ImageInfoModal
-          // data={modalState.data}
-          // url={modalState.url}
           onSubmitFormHandler={submitModalFormHandler}
           onDeleteFavBtn={deletingPhotoFromSaved}
         />

@@ -76,7 +76,6 @@ export const favouriteSlice = createSlice({
     },
     updateImgDescription: (state, action) => {
       const favedArray = [...state.favedImages];
-      console.log('favedArray1', favedArray);
       const indexTarget = favedArray.findIndex(
         (obj) => obj.id === action.payload.id
       );

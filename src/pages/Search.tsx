@@ -370,13 +370,8 @@ export const Search: React.FC = () => {
         forceBarDisplaying={false}
         onClickImgHandler={clickImgHandler}
       />
-      <ModalBackdrop
-        handlingModal={switchModalState}
-        // modalState={modalState.state}
-      >
+      <ModalBackdrop handlingModal={switchModalState}>
         <ImageInfoModal
-          // data={modalState.data}
-          // url={modalState.url}
           onSubmitFormHandler={submitModalFormHandler}
           onDeleteFavBtn={deletingPhotoFromSaved}
         />
