@@ -60,7 +60,7 @@ export const favouriteSlice = createSlice({
 
       const favedTags = [...state.tags];
       action.payload.tags &&
-        action.payload.tags.forEach((tag: any[]) => {
+        action.payload.tags.forEach((tag: string) => {
           const checker = favedTags.includes(tag);
           if (!checker) favedTags.push(tag);
         });
@@ -68,11 +68,37 @@ export const favouriteSlice = createSlice({
       state.favedImages = [...state.favedImages, action.payload];
     },
     deleteFavedImgReducer: (state, action) => {
-      const newArr = state.favedImages.filter(
-        (img) => img.id !== action.payload
+      const filteredPhotosArray = state.favedImages.filter(
+        (objPhoto) => objPhoto.id !== action.payload
       );
-      localStorage.setItem('fav-images', JSON.stringify(newArr));
-      state.favedImages = newArr;
+      const favedTags = [...state.tags];
+      const objToDelete = state.favedImages.find(
+        (objPhoto) => objPhoto.id === action.payload
+      );
+      if (objToDelete?.tags) {
+        objToDelete.tags.forEach((tag: string) => {
+          let numberOfCoincidences = 0;
+          filteredPhotosArray.forEach((objPhoto, index) => {
+            if (!objPhoto?.tags) return;
+            if (objPhoto.tags.includes(tag)) {
+              numberOfCoincidences++;
+            }
+            if (
+              index === filteredPhotosArray.length - 1 &&
+              numberOfCoincidences === 0
+            ) {
+              const indexTag = favedTags.indexOf(tag);
+              if (index !== -1) {
+                favedTags.splice(indexTag, 1);
+              }
+            }
+          });
+        });
+      }
+
+      localStorage.setItem('fav-images', JSON.stringify(filteredPhotosArray));
+      state.favedImages = filteredPhotosArray;
+      state.tags = favedTags;
     },
     updateImgDescription: (state, action) => {
       const favedArray = [...state.favedImages];

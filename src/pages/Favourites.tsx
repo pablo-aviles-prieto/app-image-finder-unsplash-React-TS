@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import {
   MainContainer,
@@ -15,7 +15,6 @@ import {
 } from '../components/store/modalSlice';
 import {
   deleteFavedImgReducer,
-  addImgToFavReducer,
   updateImgDescription,
 } from '../components/store/favouriteSlice';
 import { Stack, Chip } from '@mui/material';
@@ -32,6 +31,7 @@ const dummyTagObj: DummyObj = {};
 
 export const Favourites: React.FC = () => {
   const [filterTag, setFilterTag] = useState('');
+  const [inputValueFilter, setInputValueFilter] = useState('');
   const dispatch = useAppDispatch();
   const tags = useAppSelector((state) => state.favourite.tags);
   const favedPhotos = useAppSelector((state) => state.favourite.favedImages);
@@ -96,15 +96,20 @@ export const Favourites: React.FC = () => {
       (obj) => obj.id === imgDisplayedModal.id
     );
     if (checkDuplicity) {
+      dispatch(switchModalStateReducer());
       dispatch(deleteFavedImgReducer(id));
     } else {
       return;
     }
   };
 
-  const submitFormHandler = (e: React.FormEvent) => {
-    e.preventDefault();
+  const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValueFilter(e.currentTarget.value.trim());
   };
+
+  const dummySubmitHandler = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+  }, []);
 
   return (
     <>
@@ -118,12 +123,13 @@ export const Favourites: React.FC = () => {
         <MainContainerCard>
           <div className={styles['card-form']}>
             <div className={styles['card-form-title']}>
-              <p>Search between your saved favourite imgs</p>
+              <p>Search by description your favourited imgs</p>
             </div>
             <div className={styles['search-input-container']}>
               <SearchInput
-                placeholderText='Search between your fav imgs'
-                onSubmitFormHandler={submitFormHandler}
+                placeholderText='Search by description...'
+                onSubmitFormHandler={dummySubmitHandler}
+                onChangeInputHandler={inputChangeHandler}
               />
             </div>
             <fieldset className={styles['form-container']}>
@@ -131,6 +137,14 @@ export const Favourites: React.FC = () => {
                 {!filterTag
                   ? 'Filter by categories'
                   : `Filtered by ${filterTag}`}
+                {filterTag && (
+                  <button
+                    onClick={() => setFilterTag('')}
+                    className={classes['btn-clear-filter']}
+                  >
+                    CLEAR
+                  </button>
+                )}
               </legend>
               <div className={classes['category-tags']}>
                 <Stack
@@ -165,6 +179,7 @@ export const Favourites: React.FC = () => {
         onClickImgHandler={clickImgHandler}
         categoryColorObj={dummyTagObj}
         categorySelected={filterTag}
+        inputValueFilter={inputValueFilter}
       />
       <ModalBackdrop handlingModal={switchModalState}>
         <ImageInfoModal

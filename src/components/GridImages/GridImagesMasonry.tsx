@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   ImageListItem,
   ImageListItemBar,
@@ -16,6 +16,7 @@ type Props = {
   onClickImgHandler: (id: string, hdUrl: string) => void;
   categoryColorObj: { [key: string]: string };
   categorySelected: string;
+  inputValueFilter: string;
 };
 
 interface PhotoObj {
@@ -43,10 +44,10 @@ export const GridImagesMasonry: React.FC<Props> = ({
   onClickImgHandler,
   categoryColorObj,
   categorySelected,
+  inputValueFilter,
 }) => {
   const favedPhotos = useAppSelector((state) => state.favourite.favedImages);
   const tags = useAppSelector((state) => state.favourite.tags);
-  console.log('categorySelected', categorySelected);
 
   const renderingCategories = (objPhoto: PhotoObj) => {
     return tags.map((tag) => {
@@ -73,24 +74,46 @@ export const GridImagesMasonry: React.FC<Props> = ({
     });
   };
 
-  const renderingFilteredPhotos = () => {
-    const newArr = favedPhotos.filter(
+  const renderingFilteredPhotos = useCallback(() => {
+    return favedPhotos.filter(
       (objPhoto) => objPhoto?.tags && objPhoto.tags.includes(categorySelected)
     );
-    console.log('newArr', newArr);
-    return newArr;
-  };
+  }, [favedPhotos, categorySelected]);
 
-  const data = useMemo(
-    () => (!categorySelected ? favedPhotos : renderingFilteredPhotos()),
-    [categorySelected, favedPhotos]
-  );
-  console.log('data', data);
+  // const data = useMemo(
+  //   () => (!categorySelected ? favedPhotos : renderingFilteredPhotos()),
+  //   [categorySelected, favedPhotos]
+  // );
+
+  const filteringPhotosArray = useCallback(() => {
+    const filteredByCategories = !categorySelected
+      ? favedPhotos
+      : renderingFilteredPhotos();
+    return filteredByCategories.filter((objPhoto) => {
+      if (objPhoto?.description) {
+        return objPhoto?.description
+          .toLowerCase()
+          .includes(inputValueFilter.toLowerCase());
+      }
+    });
+  }, [categorySelected, favedPhotos, inputValueFilter]);
 
   return (
     <Box className={styles['masonry-container']} sx={{ overflowY: 'inherit' }}>
+      {filteringPhotosArray().length === 0 && (
+        <h1
+          style={{
+            color: 'rgba(74, 50, 182, 0.993)',
+            width: '90%',
+            margin: 'auto',
+            textAlign: 'center',
+          }}
+        >
+          Sorry, there are no favourite images saved!
+        </h1>
+      )}
       <ImageList variant='masonry' cols={2} gap={8}>
-        {data.map((objPhoto) => (
+        {filteringPhotosArray().map((objPhoto) => (
           <ImageListItem
             key={objPhoto.id}
             className={styles['grid-masonry-list']}
@@ -136,54 +159,3 @@ export const GridImagesMasonry: React.FC<Props> = ({
     </Box>
   );
 };
-
-const itemData = [
-  {
-    img: 'https://images.unsplash.com/photo-1549388604-817d15aa0110',
-    title: 'Bed',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1525097487452-6278ff080c31',
-    title: 'Books',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6',
-    title: 'Sink',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3',
-    title: 'Kitchen',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1588436706487-9d55d73a39e3',
-    title: 'Blinds',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1574180045827-681f8a1a9622',
-    title: 'Chairs',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1530731141654-5993c3016c77',
-    title: 'Laptop',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1481277542470-605612bd2d61',
-    title: 'Doors',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1517487881594-2787fef5ebf7',
-    title: 'Coffee',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1516455207990-7a41ce80f7ee',
-    title: 'Storage',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1597262975002-c5c3b14bbd62',
-    title: 'Candle',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4',
-    title: 'Coffee table',
-  },
-];

@@ -11,6 +11,8 @@ import {
   SearchInput,
 } from '../components';
 
+const dummyInputHandler = () => {};
+
 export const LandPage: React.FC = () => {
   const photos = useAppSelector((state) => state.search.unsplashData);
   const navigate = useNavigate();
@@ -59,6 +61,7 @@ export const LandPage: React.FC = () => {
           <SearchInput
             placeholderText='Search categories...'
             onSubmitFormHandler={submitFormHandler}
+            onChangeInputHandler={dummyInputHandler}
           />
           <MainContainerCard>
             <FavedImgsContainer />

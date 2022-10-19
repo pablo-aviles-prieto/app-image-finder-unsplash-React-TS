@@ -16,12 +16,10 @@ const style = {
 
 type Props = {
   children: JSX.Element;
-  // modalState: boolean;
   handlingModal: () => void;
 };
 
 export const ModalBackdrop: React.FC<Props> = ({
-  // modalState,
   handlingModal,
   children,
 }) => {

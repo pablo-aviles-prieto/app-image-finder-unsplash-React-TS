@@ -14,7 +14,6 @@ import {
 import {
   addPhotoModalReducer,
   switchModalStateReducer,
-  setTrueDescriptionReducer,
   setFalseDescriptionReducer,
 } from '../components/store/modalSlice';
 import { useQuery, checkingForSearchQueryParams } from '../utils';
@@ -47,29 +46,7 @@ const colorsInput = [
 
 const orientationInputData = ['landscape', 'portrait', 'squarish'];
 
-type ModalData = {
-  data: CategoryPhotoObj;
-  url: string;
-  state: boolean;
-};
-
-const initState = {
-  data: {
-    id: ``,
-    description: '',
-    width: '',
-    height: '',
-    totalPhotos: 0,
-    likes: 0,
-    urls: { full: '', small: '', thumb: '' },
-    tags: [{ title: '' }],
-    author: { name: '', link: '' },
-    imgCat: '',
-    link: '',
-  },
-  url: '',
-  state: false,
-};
+const dummyInputHandler = () => {};
 
 export const Search: React.FC = () => {
   const [colorInput, setColorInput] = useState<string | string[]>(['']);
@@ -333,6 +310,7 @@ export const Search: React.FC = () => {
               <SearchInput
                 placeholderText='Search images...'
                 onSubmitFormHandler={submitFormHandler}
+                onChangeInputHandler={dummyInputHandler}
               />
             </div>
             <fieldset className={styles['form-container']}>

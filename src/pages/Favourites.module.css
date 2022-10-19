@@ -1,4 +1,16 @@
 .category-tags-container {
   flex-wrap: wrap;
   gap: 6px;
+  overflow-y: auto;
+  max-height: 9rem;
+}
+
+.btn-clear-filter {
+  cursor: pointer;
+  color: white;
+  margin-left: 0.5rem;
+  padding: 0.15rem 0.6rem;
+  border: 2px solid #000;
+  border-radius: 13px;
+  background-color: #000;
 }

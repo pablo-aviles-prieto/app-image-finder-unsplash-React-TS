@@ -120,7 +120,7 @@ export const ImgSlider: React.FC<Props> = ({ dataArrayToPrint }) => {
     const checkNewDescription =
       checkDuplicity?.description === inputValue ? false : true;
     if (checkDuplicity && (!inputValue.trim() || !checkNewDescription)) {
-      alert('Photo already saved in favs!');
+      alert('Insert a new valid description!');
       switchModalState();
       return;
     }
@@ -134,21 +134,22 @@ export const ImgSlider: React.FC<Props> = ({ dataArrayToPrint }) => {
         })
       );
       switchModalState();
+      navigate(`/favourites`);
       return;
     }
 
-    const enteredDescription = inputValue;
-    if (enteredDescription.trim()) {
-      const newObj = { ...imgDisplayedModal };
-      newObj.description = enteredDescription;
-      dispatch(addImgToFavReducer(newObj));
-      switchModalState();
-      navigate(`/favourites`);
-    } else {
-      dispatch(addImgToFavReducer(imgDisplayedModal));
-      switchModalState();
-      navigate(`/favourites`);
-    }
+    // const enteredDescription = inputValue;
+    // if (enteredDescription.trim()) {
+    //   const newObj = { ...imgDisplayedModal };
+    //   newObj.description = enteredDescription;
+    //   dispatch(addImgToFavReducer(newObj));
+    //   switchModalState();
+    //   navigate(`/favourites`);
+    // } else {
+    //   dispatch(addImgToFavReducer(imgDisplayedModal));
+    //   switchModalState();
+    //   navigate(`/favourites`);
+    // }
   };
 
   const deletingPhotoFromSaved = (id: string) => {
@@ -186,9 +187,7 @@ export const ImgSlider: React.FC<Props> = ({ dataArrayToPrint }) => {
           )
         )}
       </Slider>
-      <ModalBackdrop
-        handlingModal={switchModalState}
-      >
+      <ModalBackdrop handlingModal={switchModalState}>
         <ImageInfoModal
           onSubmitFormHandler={submitModalFormHandler}
           onDeleteFavBtn={deletingPhotoFromSaved}
