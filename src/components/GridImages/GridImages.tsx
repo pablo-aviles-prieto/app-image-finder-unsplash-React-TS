@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback } from 'react';
 import {
   Skeleton,
   ImageList,
@@ -20,17 +20,27 @@ import styles from './GridImages.module.css';
 type GridImagesProps = {
   forceBarDisplaying: boolean;
   onClickImgHandler: (id: string, url: string) => void;
+  onClickFavIcon: (id: string) => void;
 };
 
 export const GridImages: React.FC<GridImagesProps> = ({
   forceBarDisplaying,
   onClickImgHandler,
+  onClickFavIcon,
 }) => {
   const photosList = useAppSelector((state) => state.search.unsplashData);
   const endpointCalled = useAppSelector((state) => state.search.endpointCalled);
   const statusAPI = useAppSelector((state) => state.search.status);
+  const favedPhotos = useAppSelector((state) => state.favourite.favedImages);
   const dispatch = useAppDispatch();
   console.log('photosList', photosList);
+
+  const checkingIfFaved = useCallback(
+    (id: string) => {
+      return favedPhotos.find((objPhoto) => objPhoto.id === id);
+    },
+    [favedPhotos]
+  );
 
   const loaderArray: CategoryPhotoObj[] = [...Array(30)].map((_, index) => ({
     paginationInfo: { totalCount: 0, totalPages: 0 },
@@ -145,15 +155,18 @@ export const GridImages: React.FC<GridImagesProps> = ({
                     {!forceBarDisplaying && (
                       <IconButton
                         onClick={() =>
-                          onClickImgHandler(obj.id, obj?.urls?.small)
+                          !checkingIfFaved(obj.id) && onClickFavIcon(obj.id)
                         }
                         sx={{
-                          color: 'rgba(255, 255, 255, 0.54)',
                           padding: '4px',
                         }}
                         aria-label={`${obj.description}`}
                       >
-                        <Favorite />
+                        <Favorite
+                          sx={{
+                            color: checkingIfFaved(obj.id) ? 'red' : '#bdbdbd',
+                          }}
+                        />
                       </IconButton>
                     )}
                     <IconButton

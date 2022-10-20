@@ -106,6 +106,7 @@ export const fetchPhotos = createAsyncThunk(
           name: filteredObj.user.name,
           link: filteredObj.user.links.html,
         },
+        download: filteredObj.links.download,
       }));
 
     return {

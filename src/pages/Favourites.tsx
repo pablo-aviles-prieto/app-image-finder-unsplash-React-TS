@@ -41,6 +41,8 @@ export const Favourites: React.FC = () => {
     [tags]
   );
 
+  console.log('favedPhotos', favedPhotos);
+
   const filterClickHandler = (tag: string) => {
     setFilterTag((prevState) => {
       if (prevState === tag) {
@@ -75,7 +77,6 @@ export const Favourites: React.FC = () => {
       checkDuplicity?.description === inputValue ? false : true;
     if (checkDuplicity && (!inputValue.trim() || !checkNewDescription)) {
       alert('Insert a new valid description!');
-      switchModalState();
       return;
     }
     if (checkDuplicity && checkNewDescription) {

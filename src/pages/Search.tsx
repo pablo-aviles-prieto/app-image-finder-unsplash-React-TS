@@ -158,6 +158,12 @@ export const Search: React.FC = () => {
     );
   };
 
+  const clickFavIconHandler = (id: string) => {
+    const photo = photoList.parsedArray.find((objPhoto) => objPhoto.id === id);
+    alert('Image saved to my photos!');
+    dispatch(addImgToFavReducer(photo));
+  };
+
   const submitFormHandler = (e: React.FormEvent, inputValue: string) => {
     e.preventDefault();
     setInputError(false);
@@ -347,6 +353,7 @@ export const Search: React.FC = () => {
       <GridImages
         forceBarDisplaying={false}
         onClickImgHandler={clickImgHandler}
+        onClickFavIcon={clickFavIconHandler}
       />
       <ModalBackdrop handlingModal={switchModalState}>
         <ImageInfoModal

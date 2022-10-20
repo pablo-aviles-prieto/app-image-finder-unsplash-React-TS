@@ -71,8 +71,12 @@
   min-width: 0;
 }
 
-.btn-delete-container {
+.btn-delete-download-container {
   margin-top: 1rem;
+}
+
+.btn-download {
+  margin-left: 1rem;
 }
 
 @media (min-width: 500px) {

@@ -8,8 +8,6 @@ import { useAppSelector } from '../../app/hooks';
 import styles from './ImageInfoModal.module.css';
 
 type ModalState = {
-  // data: CategoryPhotoObj;
-  // url: string;
   onSubmitFormHandler: (e: React.FormEvent, inputValue: string) => void;
   onDeleteFavBtn: (id: string) => void;
 };
@@ -32,6 +30,10 @@ export const ImageInfoModal: React.FC<ModalState> = ({
     return !!checkingForFavedImg;
   };
 
+  const downloadBtnHandler = (url: string) => {
+    console.log('url', url);
+  };
+
   return (
     <div className={styles['modal-container']}>
       <div className={styles['modal-container-flex']}>
@@ -42,7 +44,7 @@ export const ImageInfoModal: React.FC<ModalState> = ({
             }
             style={{
               maxWidth: '100%',
-              maxHeight: '65vh',
+              maxHeight: '57vh',
               borderRadius: '15px',
             }}
             src={modalPhotoUrl ? modalPhotoUrl : modalPhoto.urls.small}
@@ -86,17 +88,25 @@ export const ImageInfoModal: React.FC<ModalState> = ({
                 </button>
               </form>
             )}
-            {isImgFaved() && (
-              <div className={styles['btn-delete-container']}>
+            <div className={styles['btn-delete-download-container']}>
+              {isImgFaved() && (
                 <Button
                   onClick={() => onDeleteFavBtn(modalPhoto.id)}
                   variant='outlined'
                   color='error'
                 >
-                  delete from fav
+                  delete
                 </Button>
-              </div>
-            )}
+              )}
+              <Button
+              className={styles['btn-download']}
+                onClick={() => downloadBtnHandler(modalPhoto.download)}
+                variant='contained'
+                color='success'
+              >
+                download
+              </Button>
+            </div>
           </fieldset>
           <fieldset className={styles['info-container']}>
             <legend>Details</legend>

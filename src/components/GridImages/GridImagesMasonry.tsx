@@ -90,13 +90,15 @@ export const GridImagesMasonry: React.FC<Props> = ({
       ? favedPhotos
       : renderingFilteredPhotos();
     return filteredByCategories.filter((objPhoto) => {
-      if (objPhoto?.description) {
+      if (inputValueFilter && objPhoto?.description) {
         return objPhoto?.description
           .toLowerCase()
           .includes(inputValueFilter.toLowerCase());
       }
+      if (!inputValueFilter) return objPhoto;
     });
   }, [categorySelected, favedPhotos, inputValueFilter]);
+  console.log('filteringPhotosArray', filteringPhotosArray());
 
   return (
     <Box className={styles['masonry-container']} sx={{ overflowY: 'inherit' }}>
@@ -109,7 +111,7 @@ export const GridImagesMasonry: React.FC<Props> = ({
             textAlign: 'center',
           }}
         >
-          Sorry, there are no favourite images saved!
+          Sorry, there are no favourite images saved! (check the filters!)
         </h1>
       )}
       <ImageList variant='masonry' cols={2} gap={8}>

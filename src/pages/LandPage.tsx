@@ -12,6 +12,7 @@ import {
 } from '../components';
 
 const dummyInputHandler = () => {};
+const dummyClickFavHandler = () => {};
 
 export const LandPage: React.FC = () => {
   const photos = useAppSelector((state) => state.search.unsplashData);
@@ -46,8 +47,10 @@ export const LandPage: React.FC = () => {
   const submitFormHandler = (e: React.FormEvent, inputValue: string) => {
     e.preventDefault();
     const enteredSearch = inputValue.trim();
-    const parsedSearch = enteredSearch.replace(/(\s)+/g, '%20');
-    navigate(`/?cats=${parsedSearch}`);
+    if (enteredSearch) {
+      const parsedSearch = enteredSearch.replace(/(\s)+/g, '%20');
+      navigate(`/?cats=${parsedSearch}`);
+    }
   };
 
   const titleToDisplay = queryCategories
@@ -71,6 +74,7 @@ export const LandPage: React.FC = () => {
       <GridImages
         forceBarDisplaying={true}
         onClickImgHandler={clickImgHandler}
+        onClickFavIcon={dummyClickFavHandler}
       />
     </>
   );
