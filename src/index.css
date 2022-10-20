@@ -83,6 +83,53 @@ a#author-head-title {
   opacity: 1 !important;
 }
 
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 16rem;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 8px 1px;
+  border-radius: 6px;
+  word-wrap: break-word;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  top: 125%;
+  left: 50%;
+  margin-left: -8rem;
+
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+  content: ' ';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #555 transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
 @media (min-width: 600px) {
   .slick-prev:before,
   .slick-next:before {
@@ -106,6 +153,10 @@ a#author-head-title {
 @media (min-width: 992px) {
   .MuiImageList-root {
     grid-template-columns: repeat(3, 1fr) !important;
+  }
+  .tooltip .tooltiptext {
+    width: 20rem;
+    margin-left: -10rem;
   }
 }
 

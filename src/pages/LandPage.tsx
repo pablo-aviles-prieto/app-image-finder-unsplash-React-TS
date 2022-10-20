@@ -40,8 +40,8 @@ export const LandPage: React.FC = () => {
 
   const clickImgHandler = (id: string) => {
     const image = photos.parsedArray.find((obj) => obj.id === id);
-    console.log('image', image);
     navigate(`/search?imgscat=${id}&catname=${image?.description}`);
+    document.getElementById('container-imgs-title')?.scrollIntoView();
   };
 
   const submitFormHandler = (e: React.FormEvent, inputValue: string) => {

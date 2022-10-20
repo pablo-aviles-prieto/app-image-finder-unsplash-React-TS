@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../app/store';
-import { searchPhotosAPI, searchCategoriesAPI } from './searchPhotosAPI';
+import { searchPhotosAPI } from './searchPhotosAPI';
 
 interface ModalState {
   imgToDisplay: PhotoObj;

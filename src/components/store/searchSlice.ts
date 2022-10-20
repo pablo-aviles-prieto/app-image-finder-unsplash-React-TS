@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../app/store';
-import { searchPhotosAPI, searchCategoriesAPI } from './searchPhotosAPI';
+import { searchPhotosAPI } from './searchPhotosAPI';
 
 export interface FetchPhotoData {
   total: number;
@@ -127,7 +127,7 @@ export const fetchCategories = createAsyncThunk(
     totalPages: number | null;
     endpointCalled: string;
   }> => {
-    const response = await searchCategoriesAPI(params.url);
+    const response = await searchPhotosAPI(params.url);
     const dataParsed = await response.responseObj;
     const dataObtained = dataParsed?.results
       ? dataParsed.results

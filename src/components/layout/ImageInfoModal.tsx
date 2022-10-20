@@ -41,33 +41,43 @@ export const ImageInfoModal: React.FC<ModalState> = ({
     <div className={styles['modal-container']}>
       <div className={styles['modal-container-flex']}>
         <div className={styles['modal-container-img']}>
-          <img
-            className={
-              modalPhoto.width > modalPhoto.height ? styles['img-is-wider'] : ''
-            }
-            style={{
-              maxWidth: '100%',
-              maxHeight: '57vh',
-              borderRadius: '15px',
-            }}
-            src={modalPhotoUrl ? modalPhotoUrl : modalPhoto.urls.small}
-          />
+          <a href={modalPhoto.urls.full} target='_blank'>
+            <img
+              className={
+                modalPhoto.width > modalPhoto.height
+                  ? styles['img-is-wider']
+                  : ''
+              }
+              style={{
+                maxWidth: '100%',
+                maxHeight: '57vh',
+                borderRadius: '15px',
+              }}
+              src={modalPhotoUrl ? modalPhotoUrl : modalPhoto.urls.small}
+            />
+          </a>
         </div>
         <div>
           <fieldset className={styles['description-container']}>
             <legend>
-              {!isImgFaved()
-                ? 'Description'
-                : isModalDescription
-                ? `Photo already saved, you can change description`
-                : 'Photo already saved on favs'}
+              <i>
+                {!isImgFaved()
+                  ? 'Description'
+                  : isModalDescription
+                  ? `Photo already saved, change description...`
+                  : 'Photo already saved on favs'}
+              </i>
             </legend>
-            <p>
-              <b>
-                {modalPhoto.description &&
-                  modalPhoto.description.substring(0, 120)}
-              </b>
-            </p>
+            <>
+              {modalPhoto?.description && (
+                <div className='tooltip'>
+                  <b>{`${modalPhoto.description.substring(0, 80)}${
+                    modalPhoto.description.length > 80 ? `...` : ``
+                  }`}</b>
+                  <span className='tooltiptext'>{modalPhoto.description}</span>
+                </div>
+              )}
+            </>
             {!isModalDescription && isImgFaved() ? (
               <span></span>
             ) : (

@@ -97,7 +97,6 @@ export const Favourites: React.FC = () => {
         })
       );
       switchModalState();
-      return;
     }
   };
 
