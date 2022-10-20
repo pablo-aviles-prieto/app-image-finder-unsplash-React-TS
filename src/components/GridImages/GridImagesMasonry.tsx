@@ -17,6 +17,7 @@ type Props = {
   categoryColorObj: { [key: string]: string };
   categorySelected: string;
   inputValueFilter: string;
+  orderByFilter: string;
 };
 
 interface PhotoObj {
@@ -45,6 +46,7 @@ export const GridImagesMasonry: React.FC<Props> = ({
   categoryColorObj,
   categorySelected,
   inputValueFilter,
+  orderByFilter,
 }) => {
   const favedPhotos = useAppSelector((state) => state.favourite.favedImages);
   const tags = useAppSelector((state) => state.favourite.tags);
@@ -84,7 +86,7 @@ export const GridImagesMasonry: React.FC<Props> = ({
     const filteredByCategories = !categorySelected
       ? favedPhotos
       : renderingFilteredPhotos();
-    return filteredByCategories.filter((objPhoto) => {
+    const filteredArr = filteredByCategories.filter((objPhoto) => {
       if (inputValueFilter && objPhoto?.description) {
         return objPhoto?.description
           .toLowerCase()
@@ -92,8 +94,20 @@ export const GridImagesMasonry: React.FC<Props> = ({
       }
       if (!inputValueFilter) return objPhoto;
     });
-  }, [categorySelected, favedPhotos, inputValueFilter]);
-  console.log('filteringPhotosArray', filteringPhotosArray());
+    if (orderByFilter === 'date') {
+      filteredArr.sort(({ timeString: a }, { timeString: b }) => b - a);
+    }
+    if (orderByFilter === 'width') {
+      filteredArr.sort(({ width: a }, { width: b }) => b - a);
+    }
+    if (orderByFilter === 'height') {
+      filteredArr.sort(({ height: a }, { height: b }) => b - a);
+    }
+    if (orderByFilter === 'likes') {
+      filteredArr.sort(({ likes: a }, { likes: b }) => b - a);
+    }
+    return filteredArr;
+  }, [categorySelected, favedPhotos, inputValueFilter, orderByFilter]);
 
   return (
     <Box className={styles['masonry-container']} sx={{ overflowY: 'inherit' }}>

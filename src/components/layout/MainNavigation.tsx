@@ -12,9 +12,9 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
         <AppBar
           position='static'
           sx={{
-            bgcolor: 'transparent',
+            bgcolor: 'white',
             px: { xs: '1rem', md: '5rem' },
-            boxShadow: 'inset 0px -41px 34px -30px rgba(0 0 0 / 0.35)',
+            boxShadow: '0px 0px 9px 10px rgb(255 255 255)',
           }}
         >
           <Toolbar sx={{ px: '0' }}>
@@ -25,7 +25,7 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
                   component='span'
                   sx={{
                     flexGrow: 1,
-                    textShadow: '0px 0px 17px rgba(9, 128, 226, 0.9)',
+                    color: 'rgba(2, 101, 182, 0.864)',
                   }}
                 >
                   StorIMG
@@ -51,7 +51,7 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
                   <IconButton
                     size='large'
                     edge='start'
-                    color='inherit'
+                    color='primary'
                     aria-label='fav'
                   >
                     <Favorite
@@ -67,7 +67,7 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
                     sx={{
                       flexGrow: 1,
                       display: { xs: 'none', sm: 'block' },
-                      textShadow: '0px 0px 17px rgba(9, 128, 226, 0.9)',
+                      color: 'rgba(2, 101, 182, 0.864)',
                     }}
                   >
                     My photos
@@ -82,7 +82,7 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
                   <IconButton
                     size='large'
                     edge='start'
-                    color='inherit'
+                    color='primary'
                     aria-label='search'
                   >
                     <Search
@@ -98,7 +98,7 @@ export const MainNavigation: React.FC<{ children: JSX.Element }> = (props) => {
                     sx={{
                       flexGrow: 1,
                       display: { xs: 'none', sm: 'block' },
-                      textShadow: '0px 0px 17px rgba(9, 128, 226, 0.9)',
+                      color: 'rgba(2, 101, 182, 0.864)',
                     }}
                   >
                     Search

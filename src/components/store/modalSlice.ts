@@ -26,6 +26,8 @@ export interface PhotoObj {
     link: string | null;
   };
   download: string;
+  timeSaved: string;
+  timeString: string;
 }
 
 const initialState: ModalState = {
@@ -39,6 +41,8 @@ const initialState: ModalState = {
     tags: [''],
     author: { name: '', link: '' },
     download: '',
+    timeSaved: '',
+    timeString: '',
   },
   url: '',
   modalState: false,

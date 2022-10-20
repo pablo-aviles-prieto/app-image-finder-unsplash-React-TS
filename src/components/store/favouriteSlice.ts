@@ -53,9 +53,20 @@ export const favouriteSlice = createSlice({
       state.favedImages = parsedImages;
     },
     addImgToFavReducer: (state, action) => {
+      const newDate = new Date();
+      const dd = String(newDate.getDate()).padStart(2, '0');
+      const mm = String(newDate.getMonth() + 1).padStart(2, '0');
+      const yyyy = newDate.getFullYear();
+      const hour = String(newDate.getHours()).padStart(2, '0');
+      const mins = String(newDate.getMinutes()).padStart(2, '0');
+      const dateHour = `${dd}/${mm}/${yyyy} - ${hour}:${mins}`;
+      const newObjToSave = { ...action.payload };
+      newObjToSave.timeSaved = dateHour;
+      newObjToSave.timeString = newDate.getTime();
+
       localStorage.setItem(
         'fav-images',
-        JSON.stringify([...state.favedImages, action.payload])
+        JSON.stringify([...state.favedImages, newObjToSave])
       );
 
       const favedTags = [...state.tags];
@@ -65,7 +76,7 @@ export const favouriteSlice = createSlice({
           if (!checker) favedTags.push(tag);
         });
       state.tags = favedTags;
-      state.favedImages = [...state.favedImages, action.payload];
+      state.favedImages = [...state.favedImages, newObjToSave];
     },
     deleteFavedImgReducer: (state, action) => {
       const filteredPhotosArray = state.favedImages.filter(

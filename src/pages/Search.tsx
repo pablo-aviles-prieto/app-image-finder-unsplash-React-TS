@@ -98,10 +98,9 @@ export const Search: React.FC = () => {
         : queryOrientation == 'null'
         ? ''
         : `&orientation=${queryOrientation}`;
-      const orderByString = queryOrderBy ? `&ordered_by=${queryOrderBy}` : '';
+      const orderByString = queryOrderBy ? `&order_by=${queryOrderBy}` : '';
       advancedSearchParams = colorString + orientationString + orderByString;
     }
-    console.log('advancedSearchParams', advancedSearchParams);
     if (queryImgs) {
       const parsedString = queryImgs.trim().replace(/(\s)+/g, '%20');
       dispatch(

@@ -1,10 +1,9 @@
 .card-form {
   min-height: 16.5rem;
-  background-color: rgba(255, 255, 255, 0.795);
+  background-color: rgb(255, 255, 255);
   padding: 1rem;
   max-height: 100%;
   border-radius: 0.8rem;
-  box-shadow: 1px 1px 8px rgb(78, 173, 252);
 }
 
 .card-form-title {
@@ -58,6 +57,7 @@
   border: 1px solid rgba(2, 101, 182, 0.253);
   padding: 0 5% 0.4rem 5%;
   border-radius: 0.7rem;
+  min-height: 5rem;
 }
 
 .grid-input-form {

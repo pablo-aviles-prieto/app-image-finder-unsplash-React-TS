@@ -67,17 +67,17 @@
 
 a.active {
   padding-bottom: 0.25rem;
-  border-bottom: 4px solid rgba(166, 214, 253, 0.864);
+  border-bottom: 4px solid rgba(59, 167, 255, 0.864);
 }
 
 a.active h3 {
-  color: rgb(171, 213, 247);
+  color: rgb(59, 167, 255);
 }
 
 a#author-head-title {
   text-decoration: none;
   color: inherit;
-} 
+}
 
 .override-opacity {
   opacity: 1 !important;

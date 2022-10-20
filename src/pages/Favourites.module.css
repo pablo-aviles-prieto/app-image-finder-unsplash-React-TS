@@ -1,3 +1,9 @@
+.category-tags {
+  position: relative;
+  margin-right: 8rem;
+  min-height: 2rem;
+}
+
 .category-tags-container {
   flex-wrap: wrap;
   gap: 6px;
@@ -13,4 +19,10 @@
   border: 2px solid #000;
   border-radius: 13px;
   background-color: #000;
+}
+
+.order-input {
+  position: absolute;
+  top: 0;
+  right: 0;
 }

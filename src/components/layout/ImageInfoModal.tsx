@@ -120,7 +120,7 @@ export const ImageInfoModal: React.FC<ModalState> = ({
             </div>
           </fieldset>
           <fieldset className={styles['info-container']}>
-            <legend>Details</legend>
+            <legend>Added to fav {modalPhoto.timeSaved}H</legend>
             <ul className={styles['details-list']}>
               <li>
                 <PhotoCamera />{' '}

@@ -17,7 +17,15 @@ import {
   deleteFavedImgReducer,
   updateImgDescription,
 } from '../components/store/favouriteSlice';
-import { Stack, Chip } from '@mui/material';
+import {
+  Stack,
+  Chip,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+  FormControl,
+  InputLabel,
+} from '@mui/material';
 import { randomLightColorGenerator } from '../utils';
 
 import styles from './Search.module.css';
@@ -32,6 +40,7 @@ const dummyTagObj: DummyObj = {};
 export const Favourites: React.FC = () => {
   const [filterTag, setFilterTag] = useState('');
   const [inputValueFilter, setInputValueFilter] = useState('');
+  const [inputSelectValue, setInputSelectValue] = useState('date');
   const dispatch = useAppDispatch();
   const tags = useAppSelector((state) => state.favourite.tags);
   const favedPhotos = useAppSelector((state) => state.favourite.favedImages);
@@ -112,13 +121,17 @@ export const Favourites: React.FC = () => {
     e.preventDefault();
   }, []);
 
+  const inputSelectHandler = (e: SelectChangeEvent<string>) => {
+    setInputSelectValue(e.target.value);
+  };
+
   return (
     <>
       <MainContainer
         sectionTitle={
           filterTag
-            ? `Filtered by ${filterTag.toUpperCase()}`
-            : 'Your favourite images!'
+            ? `Your fav images filtered by ${filterTag.toUpperCase()} and by ${inputSelectValue.toUpperCase()}`
+            : `Your fav images ordered by ${inputSelectValue.toUpperCase()}`
         }
       >
         <MainContainerCard>
@@ -171,6 +184,30 @@ export const Favourites: React.FC = () => {
                     );
                   })}
                 </Stack>
+                <FormControl
+                  className={styles['order-input']}
+                  sx={{
+                    m: 1,
+                    minWidth: 120,
+                    position: 'absolute',
+                    top: '-0.5rem',
+                    right: '-9rem',
+                  }}
+                >
+                  <InputLabel id='Order-by-addition'>Order By</InputLabel>
+                  <Select
+                    labelId='Order-by'
+                    id='Order-by'
+                    value={inputSelectValue}
+                    onChange={inputSelectHandler}
+                    label='Order-by'
+                  >
+                    <MenuItem value={'date'}>Date</MenuItem>
+                    <MenuItem value={'width'}>Width</MenuItem>
+                    <MenuItem value={'height'}>Height</MenuItem>
+                    <MenuItem value={'likes'}>Likes</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
             </fieldset>
           </div>
@@ -181,6 +218,7 @@ export const Favourites: React.FC = () => {
         categoryColorObj={dummyTagObj}
         categorySelected={filterTag}
         inputValueFilter={inputValueFilter}
+        orderByFilter={inputSelectValue}
       />
       <ModalBackdrop handlingModal={switchModalState}>
         <ImageInfoModal
