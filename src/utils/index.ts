@@ -6,3 +6,4 @@ export {
 export { useQuery } from './useQuery';
 export { checkingForSearchQueryParams } from './searchQueryParams';
 export { randomLightColorGenerator } from './randomColorGenerator';
+export { downloadImgFetch } from './downloadImg';

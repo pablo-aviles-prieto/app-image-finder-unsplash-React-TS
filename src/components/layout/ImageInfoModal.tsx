@@ -4,6 +4,9 @@ import { HeightIcon, WidthIcon } from '../Icons';
 import { TextField, Button } from '@mui/material';
 import { CategoryPhotoObj } from '../store/searchSlice';
 import { useAppSelector } from '../../app/hooks';
+import { saveAs } from 'file-saver';
+import axios from 'axios';
+import { downloadImgFetch } from '../../utils';
 
 import styles from './ImageInfoModal.module.css';
 
@@ -30,8 +33,8 @@ export const ImageInfoModal: React.FC<ModalState> = ({
     return !!checkingForFavedImg;
   };
 
-  const downloadBtnHandler = (url: string) => {
-    console.log('url', url);
+  const downloadBtnHandler = (url: string, description: string | undefined) => {
+    downloadImgFetch(url, description);
   };
 
   return (
@@ -60,7 +63,10 @@ export const ImageInfoModal: React.FC<ModalState> = ({
                 : 'Photo already saved on favs'}
             </legend>
             <p>
-              <b>{modalPhoto.description}</b>
+              <b>
+                {modalPhoto.description &&
+                  modalPhoto.description.substring(0, 120)}
+              </b>
             </p>
             {!isModalDescription && isImgFaved() ? (
               <span></span>
@@ -99,8 +105,13 @@ export const ImageInfoModal: React.FC<ModalState> = ({
                 </Button>
               )}
               <Button
-              className={styles['btn-download']}
-                onClick={() => downloadBtnHandler(modalPhoto.download)}
+                className={styles['btn-download']}
+                onClick={() =>
+                  downloadBtnHandler(
+                    modalPhoto.download,
+                    modalPhoto?.description
+                  )
+                }
                 variant='contained'
                 color='success'
               >

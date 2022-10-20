@@ -80,11 +80,6 @@ export const GridImagesMasonry: React.FC<Props> = ({
     );
   }, [favedPhotos, categorySelected]);
 
-  // const data = useMemo(
-  //   () => (!categorySelected ? favedPhotos : renderingFilteredPhotos()),
-  //   [categorySelected, favedPhotos]
-  // );
-
   const filteringPhotosArray = useCallback(() => {
     const filteredByCategories = !categorySelected
       ? favedPhotos
