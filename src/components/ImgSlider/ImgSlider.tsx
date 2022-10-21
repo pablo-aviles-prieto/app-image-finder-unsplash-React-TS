@@ -36,18 +36,7 @@ const sliderSettings = {
   arrows: true,
   autoplay: true,
   swipeToSlide: true,
-  slidesToShow: 3,
   slidesToScroll: 1,
-  responsive: [
-    {
-      breakpoint: 767,
-      settings: { slidesToShow: 1 },
-    },
-    {
-      breakpoint: 992,
-      settings: { slidesToShow: 2 },
-    },
-  ],
 };
 
 const loaderArray: loaderArrayType = [...Array(5)].map((_, index) => ({
@@ -120,7 +109,25 @@ export const ImgSlider: React.FC<Props> = ({ dataArrayToPrint }) => {
 
   return (
     <>
-      <Slider className={styles.slider} {...sliderSettings}>
+      <Slider
+        slidesToShow={data.length > 2 ? 3 : data.length === 2 ? 2 : 1}
+        responsive={[
+          {
+            breakpoint: 767,
+            settings: {
+              slidesToShow: 1,
+            },
+          },
+          {
+            breakpoint: 992,
+            settings: {
+              slidesToShow: data.length > 1 ? 2 : 1,
+            },
+          },
+        ]}
+        className={styles.slider}
+        {...sliderSettings}
+      >
         {data.map((item) =>
           statusAPI !== 'idle' ? (
             <Skeleton
