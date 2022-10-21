@@ -1,15 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import {
-  fetchPhotos,
-  fetchCategories,
-  CategoryPhotoObj,
-} from '../components/store/searchSlice';
+import { fetchPhotos } from '../components/store/searchSlice';
 import {
   addImgToFavReducer,
   deleteFavedImgReducer,
-  updateImgDescription,
 } from '../components/store/favouriteSlice';
 import {
   addPhotoModalReducer,
@@ -52,17 +47,16 @@ export const Search: React.FC = () => {
   const [colorInput, setColorInput] = useState<string | string[]>(['']);
   const [forceFetch, setForceFetch] = useState(false);
   const [inputError, setInputError] = useState(false);
-  // const [modalState, setModalState] = useState<ModalData>(initState);
   const [orientationInput, setOrientationInput] = useState<string | string[]>([
     '',
   ]);
   const [orderBySwitch, setOrderBySwitch] = useState(true);
+  const [pageState, setPageState] = useState('1');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const photoList = useAppSelector((state) => state.search.unsplashData);
   const favedImgs = useAppSelector((state) => state.favourite.favedImages);
   const imgDisplayedModal = useAppSelector((state) => state.modal.imgToDisplay);
-  // const tags = useAppSelector((state) => state.favourite.tags);
 
   const orderByData = {
     trueString: 'relevant',
@@ -75,15 +69,20 @@ export const Search: React.FC = () => {
   const queryColor = useQuery().get('color');
   const queryOrientation = useQuery().get('orientation');
   const queryOrderBy = useQuery().get('ordered_by');
+  const queryPage = useQuery().get('page');
+  console.log('queryColor', queryColor);
 
   useEffect(() => {
     if (queryCategories) {
       dispatch(
         fetchPhotos({
-          url: `https://api.unsplash.com/collections/${queryCategories}/photos/?per_page=30&page=1`,
+          url: `https://api.unsplash.com/collections/${queryCategories}/photos/?per_page=30&page=${
+            queryPage ? queryPage : '1'
+          }`,
           updateTotalPages: true,
         })
       );
+      setPageState(queryPage ? queryPage : '1');
       return;
     }
     let advancedSearchParams;
@@ -105,10 +104,13 @@ export const Search: React.FC = () => {
       const parsedString = queryImgs.trim().replace(/(\s)+/g, '%20');
       dispatch(
         fetchPhotos({
-          url: `https://api.unsplash.com/search/photos/?per_page=30&page=1&query=${parsedString}${advancedSearchParams}`,
+          url: `https://api.unsplash.com/search/photos/?per_page=30&page=${
+            queryPage ? queryPage : '1'
+          }&query=${parsedString}${advancedSearchParams}`,
           updateTotalPages: true,
         })
       );
+      setPageState(queryPage ? queryPage : '1');
       return;
     }
     dispatch(
@@ -117,6 +119,7 @@ export const Search: React.FC = () => {
         updateTotalPages: true,
       })
     );
+    setPageState(queryPage ? queryPage : '1');
   }, [
     dispatch,
     queryImgs,
@@ -125,7 +128,13 @@ export const Search: React.FC = () => {
     queryOrientation,
     queryOrderBy,
     forceFetch,
+    queryPage,
+    setPageState,
   ]);
+
+  const pageChangeHandler = (page: number) => {
+    setPageState(`${page}`);
+  };
 
   const switchModalState = () => {
     dispatch(switchModalStateReducer());
@@ -199,8 +208,7 @@ export const Search: React.FC = () => {
     const checkDuplicity = favedImgs.find(
       (obj) => obj.id === imgDisplayedModal.id
     );
-    const checkNewDescription =
-      checkDuplicity?.description === inputValue ? false : true;
+
     if (checkDuplicity) {
       alert('Photo already saved in favs!');
       switchModalState();
@@ -351,8 +359,10 @@ export const Search: React.FC = () => {
       </MainContainer>
       <GridImages
         forceBarDisplaying={false}
+        pageState={pageState}
         onClickImgHandler={clickImgHandler}
         onClickFavIcon={clickFavIconHandler}
+        onPageChange={pageChangeHandler}
       />
       <ModalBackdrop handlingModal={switchModalState}>
         <ImageInfoModal

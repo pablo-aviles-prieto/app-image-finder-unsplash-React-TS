@@ -2,10 +2,7 @@ import React, { useRef } from 'react';
 import { FavoriteBorder, PhotoCamera, ThumbUp } from '@mui/icons-material';
 import { HeightIcon, WidthIcon } from '../Icons';
 import { TextField, Button } from '@mui/material';
-import { CategoryPhotoObj } from '../store/searchSlice';
 import { useAppSelector } from '../../app/hooks';
-import { saveAs } from 'file-saver';
-import axios from 'axios';
 import { downloadImgFetch } from '../../utils';
 
 import styles from './ImageInfoModal.module.css';
@@ -24,7 +21,6 @@ export const ImageInfoModal: React.FC<ModalState> = ({
   const isModalDescription = useAppSelector((state) => state.modal.description);
   const modalPhotoUrl = useAppSelector((state) => state.modal.url);
   const descriptionInput = useRef<HTMLInputElement>(null);
-  console.log('modalPhoto', modalPhoto);
 
   const isImgFaved = () => {
     const checkingForFavedImg = favedPhotos.find(

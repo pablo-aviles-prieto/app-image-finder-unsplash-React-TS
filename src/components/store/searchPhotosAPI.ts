@@ -1,4 +1,4 @@
-import { FetchPhotoResults, FetchPhotoData } from './searchSlice';
+import { FetchPhotoResults } from './searchSlice';
 import {
   gettingPageAndPageNumberFromString,
   gettingNumbersFromString,

@@ -23,9 +23,7 @@ export const ModalBackdrop: React.FC<Props> = ({
   handlingModal,
   children,
 }) => {
-  const modalState = useAppSelector((state) => state.modal.modalState);
-  console.log('modalState', modalState);
-  
+  const modalState = useAppSelector((state) => state.modal.modalState);  
 
   return (
     <div>

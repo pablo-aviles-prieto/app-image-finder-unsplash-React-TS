@@ -18,7 +18,7 @@ export const FavedImgsContainer: React.FC = () => {
       ) : (
         <div className={styles['no-faved-imgs']}>
           <h2>You can search and save your favourite images!</h2>
-          <p>Your favourited images will be showcased right here</p>
+          <p>Your favourited images will be showcase right here</p>
           <div className={styles['no-faved-imgs-icons']}>
             <ImageSearch
               sx={{

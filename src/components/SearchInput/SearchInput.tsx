@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Search } from '@mui/icons-material';
 
 import styles from './SearchInput.module.css';

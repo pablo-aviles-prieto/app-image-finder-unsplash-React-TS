@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import Skeleton from '@mui/material/Skeleton';
@@ -6,7 +5,6 @@ import { ImgCard } from './ImgCard';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { CategoryPhotoObj } from '../store/searchSlice';
 import {
-  addImgToFavReducer,
   deleteFavedImgReducer,
   updateImgDescription,
 } from '../store/favouriteSlice';
@@ -33,7 +31,6 @@ type Props = {
 };
 
 const sliderSettings = {
-  dots: true,
   infinite: true,
   speed: 500,
   arrows: true,
@@ -60,41 +57,13 @@ const loaderArray: loaderArrayType = [...Array(5)].map((_, index) => ({
   title: '',
 }));
 
-type ModalData = {
-  data: CategoryPhotoObj;
-  url: string;
-  state: boolean;
-};
-
-const initState = {
-  data: {
-    id: ``,
-    description: '',
-    width: '',
-    height: '',
-    totalPhotos: 0,
-    likes: 0,
-    urls: { full: '', small: '', thumb: '' },
-    tags: [{ title: '' }],
-    author: { name: '', link: '' },
-    imgCat: '',
-    link: '',
-  },
-  url: '',
-  state: false,
-};
-
 export const ImgSlider: React.FC<Props> = ({ dataArrayToPrint }) => {
-  // const [modalState, setModalState] = useState<ModalData>(initState);
-  const photoList = useAppSelector((state) => state.search.unsplashData);
   const favedImgs = useAppSelector((state) => state.favourite.favedImages);
   const imgDisplayedModal = useAppSelector((state) => state.modal.imgToDisplay);
   const statusAPI = useAppSelector((state) => state.search.status);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const data = statusAPI === 'idle' ? dataArrayToPrint : loaderArray;
-  console.log('data', data);
 
   const switchModalState = () => {
     dispatch(switchModalStateReducer());

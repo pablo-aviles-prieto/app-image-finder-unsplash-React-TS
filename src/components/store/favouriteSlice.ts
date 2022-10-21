@@ -1,6 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, AppThunk } from '../../app/store';
-import { searchPhotosAPI } from './searchPhotosAPI';
+import { createSlice } from '@reduxjs/toolkit';
 
 interface FavState {
   favedImages: any[];

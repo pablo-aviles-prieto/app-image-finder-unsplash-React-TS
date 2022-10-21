@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { fetchCategories } from '../components/store/searchSlice';
@@ -15,28 +15,50 @@ const dummyInputHandler = () => {};
 const dummyClickFavHandler = () => {};
 
 export const LandPage: React.FC = () => {
+  const [pageState, setPageState] = useState('1');
   const photos = useAppSelector((state) => state.search.unsplashData);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const queryCategories = useQuery().get('cats');
+  const queryPage = useQuery().get('page');
 
   useEffect(() => {
     if (queryCategories) {
       dispatch(
         fetchCategories({
-          url: `https://api.unsplash.com/search/collections/?per_page=30&page=1&query=${queryCategories}`,
+          url: `https://api.unsplash.com/search/collections/?per_page=30&page=${
+            queryPage ? queryPage : '1'
+          }&query=${queryCategories}`,
           updateTotalPages: true,
         })
       );
+      setPageState((prevState) => {
+        if (queryPage) {
+          return prevState === queryPage ? prevState : queryPage;
+        }
+        return prevState;
+      });
       return;
     }
     dispatch(
       fetchCategories({
-        url: 'https://api.unsplash.com/collections/?per_page=30&page=1',
+        url: `https://api.unsplash.com/collections/?per_page=30&page=${
+          queryPage ? queryPage : '1'
+        }`,
         updateTotalPages: true,
       })
     );
-  }, [dispatch, queryCategories]);
+    setPageState((prevState) => {
+      if (queryPage) {
+        return prevState === queryPage ? prevState : queryPage;
+      }
+      return prevState;
+    });
+  }, [dispatch, queryCategories, queryPage, setPageState]);
+
+  const pageChangeHandler = (page: number) => {
+    setPageState(`${page}`);
+  };
 
   const clickImgHandler = (id: string) => {
     const image = photos.parsedArray.find((obj) => obj.id === id);
@@ -49,7 +71,7 @@ export const LandPage: React.FC = () => {
     const enteredSearch = inputValue.trim();
     if (enteredSearch) {
       const parsedSearch = enteredSearch.replace(/(\s)+/g, '%20');
-      navigate(`/?cats=${parsedSearch}`);
+      navigate(`/?cats=${parsedSearch}&page=1`);
     }
   };
 
@@ -73,8 +95,10 @@ export const LandPage: React.FC = () => {
       </MainContainer>
       <GridImages
         forceBarDisplaying={true}
+        pageState={pageState}
         onClickImgHandler={clickImgHandler}
         onClickFavIcon={dummyClickFavHandler}
+        onPageChange={pageChangeHandler}
       />
     </>
   );

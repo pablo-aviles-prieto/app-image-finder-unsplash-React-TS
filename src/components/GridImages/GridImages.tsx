@@ -11,29 +11,35 @@ import {
 } from '@mui/material';
 import { RemoveRedEye, Favorite, PhotoCamera, Hd } from '@mui/icons-material';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { CategoryPhotoObj, fetchPhotos } from '../store/searchSlice';
-import { fetchCategories } from '../../components/store/searchSlice';
+import {
+  CategoryPhotoObj,
+  fetchPhotos,
+  fetchCategories,
+} from '../store/searchSlice';
 import { replacingPageNumberInLink } from '../../utils/regex';
 
 import styles from './GridImages.module.css';
 
 type GridImagesProps = {
   forceBarDisplaying: boolean;
+  pageState: string;
   onClickImgHandler: (id: string, url: string) => void;
   onClickFavIcon: (id: string) => void;
+  onPageChange: (page: number) => void;
 };
 
 export const GridImages: React.FC<GridImagesProps> = ({
   forceBarDisplaying,
+  pageState,
   onClickImgHandler,
   onClickFavIcon,
+  onPageChange,
 }) => {
   const photosList = useAppSelector((state) => state.search.unsplashData);
   const endpointCalled = useAppSelector((state) => state.search.endpointCalled);
   const statusAPI = useAppSelector((state) => state.search.status);
   const favedPhotos = useAppSelector((state) => state.favourite.favedImages);
   const dispatch = useAppDispatch();
-  console.log('photosList', photosList);
 
   const checkingIfFaved = useCallback(
     (id: string) => {
@@ -191,7 +197,7 @@ export const GridImages: React.FC<GridImagesProps> = ({
               count={photosList.totalPages}
               color='primary'
               size='large'
-              // page={}
+              page={+pageState}
               siblingCount={1}
               onChange={(e, page) => {
                 const parsedLink = replacingPageNumberInLink(
@@ -212,6 +218,10 @@ export const GridImages: React.FC<GridImagesProps> = ({
                 document
                   .getElementById('container-imgs-title')
                   ?.scrollIntoView();
+                const url = new URL(window.location.href);
+                url.searchParams.set('page', page.toLocaleString());
+                window.history.pushState({}, '', url.toString());
+                onPageChange(page);
               }}
             />
           </Stack>

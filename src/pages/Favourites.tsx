@@ -50,8 +50,6 @@ export const Favourites: React.FC = () => {
     [tags]
   );
 
-  console.log('favedPhotos', favedPhotos);
-
   const filterClickHandler = (tag: string) => {
     setFilterTag((prevState) => {
       if (prevState === tag) {
