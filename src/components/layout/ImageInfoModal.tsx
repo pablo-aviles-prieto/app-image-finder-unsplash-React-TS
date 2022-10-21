@@ -134,7 +134,7 @@ export const ImageInfoModal: React.FC<ModalState> = ({
                   href={modalPhoto.author.link ? modalPhoto.author.link : '#'}
                   target='_blank'
                 >
-                  @{modalPhoto.author.name}
+                  {modalPhoto.author.name} @Unsplash
                 </a>
               </li>
               <li>

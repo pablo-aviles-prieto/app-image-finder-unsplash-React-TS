@@ -1,9 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import Skeleton from '@mui/material/Skeleton';
 import { ImgCard } from './ImgCard';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { CategoryPhotoObj } from '../store/searchSlice';
 import {
   deleteFavedImgReducer,
   updateImgDescription,
