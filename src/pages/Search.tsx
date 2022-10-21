@@ -70,7 +70,6 @@ export const Search: React.FC = () => {
   const queryOrientation = useQuery().get('orientation');
   const queryOrderBy = useQuery().get('ordered_by');
   const queryPage = useQuery().get('page');
-  console.log('queryColor', queryColor);
 
   useEffect(() => {
     if (queryCategories) {

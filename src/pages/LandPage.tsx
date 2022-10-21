@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { fetchCategories } from '../components/store/searchSlice';
@@ -75,9 +75,13 @@ export const LandPage: React.FC = () => {
     }
   };
 
-  const titleToDisplay = queryCategories
-    ? `Searching the categories: ${queryCategories}`
-    : 'Browse around this unsplash categories';
+  const titleToDisplay = useMemo(
+    () =>
+      queryCategories
+        ? `Searching the categories: ${queryCategories}`
+        : 'Browse around this unsplash categories',
+    [queryCategories]
+  );
 
   return (
     <>
