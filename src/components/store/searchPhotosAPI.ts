@@ -10,7 +10,7 @@ export const searchPhotosAPI: (
   const response = await fetch(url, {
     method: 'GET',
     headers: {
-      Authorization: 'Client-ID npSG8DeRNQsPiJv00JjJfo6d_hN-n47wb4yWQ8sjTcs',
+      Authorization: 'Client-ID SOPOVCNGvYl3DOy-4n5LJHUb94oax27VdhZ4g3v1gh0',
     },
   });
   if (!response.ok) {

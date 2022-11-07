@@ -105,9 +105,91 @@ export const ImgSlider: React.FC<Props> = ({ dataArrayToPrint }) => {
     }
   };
 
+  // const rendering1FavImg = (data: any) => {
+  //   console.log('data1', data);
+  //   return (
+  //     <>
+  //       {data.map((item: any) =>
+  //         statusAPI !== 'idle' ? (
+  //           <Skeleton
+  //             animation='wave'
+  //             className={styles['placeholder-card']}
+  //             key={item.id}
+  //             variant='rectangular'
+  //             height={230}
+  //           />
+  //         ) : (
+  //           <ImgCard
+  //             id={item.id}
+  //             key={item.id}
+  //             img={item.urls.small}
+  //             title={item.description}
+  //             onImgClick={clickImgHandler}
+  //           />
+  //         )
+  //       )}
+  //       {statusAPI === 'idle' && (
+  //         <>
+  //           <Skeleton
+  //             animation='wave'
+  //             className={styles['placeholder-card']}
+  //             key='2'
+  //             variant='rectangular'
+  //             height={230}
+  //           />
+  //           <Skeleton
+  //             animation='wave'
+  //             className={styles['placeholder-card']}
+  //             key='3'
+  //             variant='rectangular'
+  //             height={230}
+  //           />
+  //         </>
+  //       )}
+  //     </>
+  //   );
+  // };
+
+  // const rendering2FavImgs = (data: any) => {
+  //   console.log('data2', data);
+  //   return (
+  //     <>
+  //       {data.map((item: any) =>
+  //         statusAPI !== 'idle' ? (
+  //           <Skeleton
+  //             animation='wave'
+  //             className={styles['placeholder-card']}
+  //             key={item.id}
+  //             variant='rectangular'
+  //             height={230}
+  //           />
+  //         ) : (
+  //           <ImgCard
+  //             id={item.id}
+  //             key={item.id}
+  //             img={item.urls.small}
+  //             title={item.description}
+  //             onImgClick={clickImgHandler}
+  //           />
+  //         )
+  //       )}
+  //       {statusAPI === 'idle' && (
+  //         <Skeleton
+  //           animation='wave'
+  //           className={styles['placeholder-card']}
+  //           key='3'
+  //           variant='rectangular'
+  //           height={230}
+  //         />
+  //       )}
+  //     </>
+  //   );
+  // };
+
   return (
     <>
       <Slider
+        // slidesToShow={3}
         slidesToShow={data.length > 2 ? 3 : data.length === 2 ? 2 : 1}
         responsive={[
           {
@@ -119,6 +201,7 @@ export const ImgSlider: React.FC<Props> = ({ dataArrayToPrint }) => {
           {
             breakpoint: 992,
             settings: {
+              // slidesToShow: 2,
               slidesToShow: data.length > 1 ? 2 : 1,
             },
           },
@@ -127,24 +210,24 @@ export const ImgSlider: React.FC<Props> = ({ dataArrayToPrint }) => {
         {...sliderSettings}
       >
         {data.map((item) =>
-          statusAPI !== 'idle' ? (
-            <Skeleton
-              animation='wave'
-              className={styles['placeholder-card']}
-              key={item.id}
-              variant='rectangular'
-              height={230}
-            />
-          ) : (
-            <ImgCard
-              id={item.id}
-              key={item.id}
-              img={item.urls.small}
-              title={item.description}
-              onImgClick={clickImgHandler}
-            />
-          )
-        )}
+            statusAPI !== 'idle' ? (
+              <Skeleton
+                animation='wave'
+                className={styles['placeholder-card']}
+                key={item.id}
+                variant='rectangular'
+                height={230}
+              />
+            ) : (
+              <ImgCard
+                id={item.id}
+                key={item.id}
+                img={item.urls.small}
+                title={item.description}
+                onImgClick={clickImgHandler}
+              />
+            )
+          )}
       </Slider>
       <ModalBackdrop handlingModal={switchModalState}>
         <ImageInfoModal

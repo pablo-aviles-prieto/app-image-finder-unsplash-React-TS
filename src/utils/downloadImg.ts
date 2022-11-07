@@ -6,7 +6,7 @@ export const downloadImgFetch = (
   description: string | undefined
 ) => {
   axios
-    .get(`${url}&client_id=npSG8DeRNQsPiJv00JjJfo6d_hN-n47wb4yWQ8sjTcs`)
+    .get(`${url}&client_id=SOPOVCNGvYl3DOy-4n5LJHUb94oax27VdhZ4g3v1gh0`)
     .then((response) => {
       if (response) {
         saveAs(
