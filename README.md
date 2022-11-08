@@ -9,7 +9,7 @@ App image finder using the unsplash API to search and save the images in localst
 ## Features
 
 <ul>
-<li>Browse between the different categories or search for specific photos from the unsplash API.<li>
+<li>Browse between the different categories or search for specific photos from the unsplash API.</li>
 <li>Narrow down the searches using the different filters in the search page.</li>
 <li>Download the photos to your device in HD resolution.</li>
 <li>Save your favorite images to My photos section, where you can change the description, filter and re-order them.</li>
